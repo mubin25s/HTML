@@ -1,0 +1,26 @@
+body{
+border: 2px;
+position:sticky;
+
+}
+ .note{   
+            border: 2px solid black;
+            border-collapse: collapse;
+            background-color: blanchedalmond;
+        }
+        .ok{
+            border: 2px solid red;
+            background-color: blanchedalmond;
+            border-collapse: collapse;
+              text-shadow: 2px 9px rgb(201, 200, 200);
+        }
+        #klop{
+            border: 2px solid blue;
+            background-color: lightblue;
+            border-collapse: collapse;
+        }
+        #rupt{
+            border: 2px solid green;
+            background-color: lightgreen;
+            border-collapse: collapse;
+        }

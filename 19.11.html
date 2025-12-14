@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+    table,td{
+            border:  5px solid black;
+        
+            text-align: center;
+            height: 100px;
+            width: 200px;;
+    } 
+        </style>
+      
+
+    </head>
+
+    <body>
+        
+        <table>
+            <tr>
+                <td >Chrome</td>
+                <td id="edge">Edge</td>
+            </tr>
+            <tr>
+                <td id="yes">Yes</td>
+                <td>Yes</td>
+            </tr>
+        </table>
+        <p id = "r"></p>
+
+
+          <script>
+        
+            const y = document.getElementById("edge").style.backgroundColor  ="red";
+             const z = document.getElementById("yes").style.backgroundColor  ="green";
+              
+             const cat ={
+                type : "corolla",
+                roll : "rols",
+
+
+
+            };
+             document.getElementById("r").innerHTML  = "hi " + cat.roll + cat.type;
+
+     
+    
+          </script>
+
+
+    </body>
+</html>

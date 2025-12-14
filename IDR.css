@@ -1,0 +1,21 @@
+#A {
+  display: block;
+  color: black;
+  text-align: center;
+  font-size: 100px;
+}
+div {
+  text-align: center;
+}
+.buttons {
+  padding: 10px 20px;
+  font-size: 1cm;
+  color: white;
+  background-color: lightcoral;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+.buttons:hover {
+  background-color: rgb(255, 173, 173);
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linear Search in JavaScript</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #fff;
+      text-align: center;
+      margin-top: 60px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 6px;
+      border: none;
+      font-size: 16px;
+    }
+    input {
+      width: 200px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Linear Search Algorithm (JavaScript)</h2>
+  <p>Enter numbers separated by commas:</p>
+  <input type="text" id="arrayInput" placeholder="e.g. 5, 8, 2, 9, 1">
+  <br>
+  <input type="text" id="searchValue" placeholder="Enter value to search">
+  <br>
+  <button onclick="linearSearch()">Search</button>
+
+  <div id="result"></div>
+
+  <script>
+    function linearSearch() {
+      // Get the input values
+      const arr = document.getElementById("arrayInput").value.split(",").map(Number);
+      const value = Number(document.getElementById("searchValue").value);
+      
+      // Perform linear search
+      let index = -1;
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === value) {
+          index = i;
+          break;
+        }
+      }
+
+      // Display result
+      const result = document.getElementById("result");
+      if (index !== -1) {
+        result.innerHTML = ✅ Value <b>${value}</b> found at position <b>${index}</b> (index starts from 0).;
+      } else {
+        result.innerHTML = ❌ Value <b>${value}</b> not found in the array.;
+      }
+    }
+  </script>
+
+
+
+</body>
+</html>
+
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+
+    <title>PetShop</title>
+    </head>
+    <body>
+    
+<p id="original"></p>
+<p id="sorted"></p>
+<p id="result"></p>
+    <script>
+       
+
+
+
+var arr = [5, 2, 9, 1, 7]
+
+document.getElementById("original").innerHTML = "Original Array: " + arr
+
+for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = 0; j < arr.length - i - 1; j++) {
+        if (arr[j] > arr[j + 1]) {
+            let temp = arr[j]
+            arr[j] = arr[j + 1]
+            arr[j + 1] = temp
+        }
+    }
+}
+
+document.getElementById("sorted").innerHTML = "Sorted Array: " + arr
+
+let target = 7
+let found = -1
+
+for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === target) {
+        found = i
+        break
+    }
+}
+
+
+if (found !== -1)
+    document.getElementById("result").innerHTML = "Element " + target + " found at index " + found
+else
+    document.getElementById("result").innerHTML = "Element not found";
+
+
+
+    const robert = [  ];
+    robert[first] = "ho";
+    robert.length;
+
+
+
+
+
+    </script>
+    </body>
+</html>
+

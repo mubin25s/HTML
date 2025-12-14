@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        table,td{
+            border:  5px solid;
+            border-style: double;
+            border-collapse: collapse;
+            text-align: center;
+            border-color: rgb(216, 149, 160);
+        
+            height: 50px;
+
+        }
+        .td{
+
+            border-color: purple;
+            border: 5px;
+            text-align: center;
+
+        }
+        </style>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>Table 1</td>
+                <td colspan="2"> 
+                    Table 1
+                    <table>
+                        <tr>
+                            <td>Table 2</td>
+                            <td>Table 2</td>
+                    </tr>
+                        </tr>
+                        <tr>
+                            <td>Table 2</td>
+                            <td>Table 2</td>
+                        </table>
+            </tr>
+            
+            <tr>
+                <td >Table 1</td>
+                <td id="tag">&lt;/&gt;</td>
+            </tr>
+            
+            
+        </table>
+    </body>
+</html>

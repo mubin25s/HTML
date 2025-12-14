@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form in Table</title>
+</head>
+<body>
+
+  <form action="#" method="post">
+    <table border="1" cellspacing="0" cellpadding="8" align="center">
+      <tr>
+        <th colspan="2">Fill the form below</th>
+      </tr>
+
+      <tr>
+        <td><label for="name">Name</label></td>
+        <td><input type="text" id="name" name="name"></td>
+      </tr>
+
+      <tr>
+        <td><label for="password">Password</label></td>
+        <td><input type="password" id="password" name="password"></td>
+      </tr>
+
+      <tr>
+        <td><label for="feedback">Feedback</label></td>
+        <td><textarea id="feedback" name="feedback" rows="5" cols="30" placeholder="Write your feedback here..."></textarea></td>
+      </tr>
+
+      <tr>
+        <td>Gender</td>
+        <td>
+          <input type="radio" id="male" name="gender" value="male">
+          <label for="male">Male</label>
+          <input type="radio" id="female" name="gender" value="female">
+          <label for="female">Female</label>
+        </td>
+      </tr>
+
+      <tr>
+        <td>Subject</td>
+        <td>
+          <input type="checkbox" id="web" name="subject" value="web">
+          <label for="web">Web</label>
+          <input type="checkbox" id="math" name="subject" value="math">
+          <label for="math">Math</label>
+          <input type="checkbox" id="graphics" name="subject" value="graphics">
+          <label for="graphics">Graphics</label>
+          <input type="checkbox" id="english" name="subject" value="english">
+          <label for="english">English</label>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" align="center">
+          <input type="reset" value="Reset All">
+          <input type="submit" value="Submit Above Details">
+        </td>
+      </tr>
+    </table>
+  </form>
+
+</body>
+</html>

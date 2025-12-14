@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            h1 {
+                color: crimson;
+            }
+        </style>
+
+    </head>
+    <body>
+        <h1>Sorted People by Age</h1>
+        <P id="name"></P>
+        <script>
+        const people = [
+            { name: "Alice", age: 30 },
+            { name: "Bob", age: 25 },
+            { name: "Charlie", age: 35 },
+            { name: "David", age: 20 },
+            { name: "Eve", age: 28 },
+        ];
+    
+              people.sort((a, b) => a.age - b.age);
+        document.getElementById("name").innerHTML = people.map(person => person.name + " (" + person.age + ")").join(", ");
+        </script>
+        
+
+    </body>
+</html>

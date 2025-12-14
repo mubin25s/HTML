@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Registration Form</title>
+    <link rel="stylesheet" href="form2.css">
+    </head>
+    <body>
+        <form id="form1" >
+            <h2> Registration Form </h2>
+             
+            <p>
+           <label for="roll ">Roll NO: </label> 
+             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="number" min="4" max="20"><br>
+            Student Name: <input type="text" value="First Name" name="fname" style="width: 120px;"> - <input type="text" Value="Last Name" name="lname"  style="width: 120px;"><br>
+            </p>
+            
+            <p>
+                <label for="roll ">    Father's Name: </label> 
+         <input type ="text" name ="fateers name" placeholder="Enter Father's Name"><br>
+                         <label for="roll "> Mother's Name :  </label> 
+            <input type ="text" name ="mothers name" placeholder="Enter Mother's Name"><br>
+           
+            </p>
+            <p>
+
+            Date of Birth: <input type="date" ></p>
+            <p>
+            Mobile no:&nbsp;<input type="text" style="width: 20px;"> - <input type="tel" name="phone" placeholder="Enter Mobile No"><br>
+            Email Id: <input type="email" name="email" placeholder="Enter Email"><br>
+            Password: <input type="password" placeholder="    **********"><br>
+            </p>
+            
+            <p>
+            Gender:
+            <label>
+            <input type="radio" name="Gender">Male
+            </label>
+            <input type ="radio" name="Gender">Female
+            <input type="radio" name="Gender">Others
+        
+            </p>
+       
+            <p>
+            Department:
+            <input type="checkbox" name="Department">CSE
+            <input type="checkbox" name="Department">IT
+            <input type="checkbox" name="Department">ECE
+            <input type="checkbox" name="Department">CIVIL
+            <input type="checkbox" name="Department">MECH
+            </p>
+           <p>
+            Course:
+            <select>
+                <option value ="Select">Select</option>
+                <optiom vaue ="B.Tech">B.Tech</option>
+                <option value ="M.Tech">M.Tech</option>
+                <option value ="MBA">MBA</option>
+                <option value ="MCA">MCA</option>
+            </select>
+            </p>
+        <p>
+            Option:
+            <input list="browser" name="browser">
+            <datalist>
+                   <option value ="Select">Select</option>
+                <option vaue ="B.Tech">B.Tech</option>
+                <option value ="M.Tech">M.Tech</option>
+                <option value ="MBA">MBA</option>
+                <option value ="MCA">MCA</option>
+
+            </datalist>
+            </p>
+            <p>
+
+            Student's Photo: <input type="file"> 
+            </p>
+            <p>
+            City: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type ="text" style="width:110px;"><br> <br>
+            Address: <input type ="text" style="height: 200px;height: 50px;" ><br>
+            </p>
+
+
+        
+
+<br>
+
+            <input type="button"  id="register" value="Register" style="border-radius: 20px;" onclick="this.value='Registered'" >
+        </form>
+        </body>
+        </form>
+

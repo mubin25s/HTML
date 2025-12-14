@@ -1,0 +1,50 @@
+
+            #form1{
+                background-color: lightpink;
+                text-align: left;
+                padding: 60px;
+                border:5px solid black;
+
+            }
+
+
+
+            #STR{
+                font-size: 20px;
+    text-align: center;
+
+
+            }
+
+      #register{
+        text-align: center;
+    background-color: rgb(234, 82, 82);
+    transition: 0.5s;
+      }
+    #register:hover{
+
+        background-color: rgb(243, 210, 215);
+        padding: 10px;
+
+
+    }
+
+    
+
+     h2{
+        text-align: center;
+
+     }
+     p{
+        background-color: rgb(252, 210, 216);
+        padding: 10px;
+        border-radius: 20px;
+        transition: 0.5s;
+
+        
+     }
+p:hover{
+
+      background-color: rgb(250, 166, 179);
+        padding: 30px;
+}
