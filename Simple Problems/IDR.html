@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+    <title> IDR</title>
+<head>
+    <style>
+#A {
+  display: block;
+  color: black;
+  text-align: center;
+  font-size: 100px;
+}
+div {
+  text-align: center;
+}
+.buttons {
+  padding: 10px 20px;
+  font-size: 1cm;
+  color: white;
+  background-color: lightcoral;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+.buttons:hover {
+  background-color: rgb(255, 173, 173);
+}
+    </style>
+
+
+</head>
+
+<body>
+    
+    <label id="A">0</label> <br>
+   <div>
+    <button id ="I" class="buttons">Increase</button>
+    <button id ="D" class="buttons">Decrese </button>
+    <button id ="R" class="buttons">Reset</button>
+      </div>
+      <script>
+const increase = document.getElementById("I");
+const decrease = document.getElementById("D");
+const reset = document.getElementById("R");
+const label = document.getElementById("A");
+let count = 0;
+
+
+I.onclick = function(){
+
+    count++;
+    label.textContent = count;
+
+}
+
+D.onclick =function (){
+ count--;
+ label.textContent = count;
+
+}
+R.onclick = function(){
+    count = 0;
+    label.textContent = count;
+    
+}
+      </script>
+
+</body>

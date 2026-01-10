@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>OLD</title>
+        <style>
+p{
+background-color: antiquewhite;
+color: blue;
+}
+
+h1{
+    background-color: lightpink;
+    color:black
+
+
+}
+ .note{   
+            border: 2px solid black;
+            border-collapse: collapse;
+            background-color: blanchedalmond;
+        }
+        .ok{
+            border: 2px solid red;
+            background-color: blanchedalmond;
+            border-collapse: collapse;
+        }
+        #klop{
+            border: 2px solid blue;
+            background-color: lightblue;
+            border-collapse: collapse;
+        }
+        #rupt{
+            border: 2px solid green;
+            background-color: lightgreen;
+            border-collapse: collapse;
+        }
+        body{
+            background-color: rgb(253, 253, 253);
+        }
+        </style>
+       
+
+
+    </head>
+
+    <body>
+ 
+        <h1 id ="HI"></h1>
+        <p id="ri"></p>
+
+
+
+        <h1> welcome</h1>
+        <lebel>username:</lebel>
+        <input id="ghost"> </input><br>
+        <button id = "my submit">submit</button>
+        
+
+
+        <p id="p1"></p>
+        <p id ="p2"></p>
+        <h1 id = "p3"></h1>
+         <script>
+document.getElementById("HI").innerHTML='hlw';
+document.getElementById("ri").innerHTML='WOW';
+let x=55;
+console.log(`hi my age is ${x}`); //console.log(``) = printf
+console.log(`hi my age is ${x}`);
+console.log(`hi my age is ${x}`);
+let food = "Rice";
+console.log(`${food} is good for health` ); //${food} = variables
+
+let y = "robot"
+console.log(`${y} is good`);
+fullname = "FATHUM MUBIN";
+console.log(   `The name is ${fullname}`);
+
+let age = 22;
+let student = true;
+
+//document.getElementById("").textContent = ` ${}`= println
+document.getElementById("p1").textContent = `my name is ${fullname}`;
+document.getElementById("p2").textContent = `I'm  ${age} years old`;
+document.getElementById("p3").textContent = `I am a ${student}`;
+
+let z = 55;
+ui = z -1;
+console.log(`${ui}`);
+
+uii= ui**3;  //power  
+console.log(`${uii}`);
+
+let A = 31
+a= A%6; //modulas
+console.log(`${a}`); 
+
+let result = 1+2+3**5/34-35 ;
+console.log(    `${result}`);
+
+
+//let username;
+// username = window.prompt("why man"); 
+//console.log(username);
+
+document.getElementById("my submit").onclick = function(){
+    username = document.getElementById("ghost").value;
+    console.log(username);
+}
+
+
+let birthday = 25;
+birthday = birthday + 1;
+console.log(`birthday`);
+
+let m = "0";
+let n = "jole";
+let o = "";
+
+m =Number(m);
+n =String(n);
+o =Boolean(o);
+
+    console.log(m,typeof m); 
+     console.log(n,typeof n);
+      console.log(o,typeof 0);
+const pi = 3.14169;
+let radius ;
+let C;
+//radius = window.prompt("enter the radious");
+radius= Number(radius);
+C = 2 * pi * radius;
+console.log(C);
+         </script>
+        
+        
+        <h2> Enter the radious </h2>
+        <label> Radious</label>
+        <input type="text" id = "mytext">
+        <button id = "submit">Submit</button>
+        <h3 id="Myh3"> </h3>
+         
+        <script>
+const PI = 3.14169;
+let radious;
+let Ci;
+
+document.getElementById("submit").onclick = function () {
+  document.getElementById("mytext").value;
+  radius = Number(radious);
+  Ci = 2 * PI * radious;
+  document.getElementById("Myh3").textContent = Ci + "cm";
+  document.getElementById("Myh3").style.color = "red";
+};
+        </script>
+        
+</body>
+
+
+
+
+</html>
