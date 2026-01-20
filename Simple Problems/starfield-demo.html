@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Starfield Background Effect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #030303;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #starfield-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #00f2ff;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .content h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            text-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .info {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="starfield-canvas"></canvas>
+    
+    <div class="content">
+        <h1></h1>
+    </div>
+
+    <div class="info">
+        Move your mouse to control the warp speed!
+    </div>
+
+    <script>
+        // 3D Starfield Animation
+        const canvas = document.getElementById('starfield-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let stars = [];
+        const starCount = 300;
+        let speed = 0.5;
+
+        // Resize canvas
+        const resize = () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        };
+
+        // Star Class
+        class Star {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = (Math.random() - 0.5) * width * 2;
+                this.y = (Math.random() - 0.5) * height * 2;
+                this.z = Math.random() * width;
+                this.pz = this.z;
+            }
+
+            update() {
+                this.z -= speed * 10;
+                if (this.z <= 0) {
+                    this.reset();
+                    this.z = width;
+                    this.pz = this.z;
+                }
+            }
+
+            draw() {
+                const x = (this.x / this.z) * width/2 + width/2;
+                const y = (this.y / this.z) * height/2 + height/2;
+                
+                const r = (width - this.z) / width * 2;
+
+                const px = (this.x / this.pz) * width/2 + width/2;
+                const py = (this.y / this.pz) * height/2 + height/2;
+
+                ctx.beginPath();
+                ctx.moveTo(px, py);
+                ctx.lineTo(x, y);
+                
+                const opacity = (width - this.z) / width;
+                ctx.strokeStyle = `rgba(0, 242, 255, ${opacity})`;
+                ctx.lineWidth = r;
+                ctx.stroke();
+
+                this.pz = this.z;
+            }
+        }
+
+        const initStars = () => {
+            stars = [];
+            for (let i = 0; i < starCount; i++) {
+                stars.push(new Star());
+            }
+        };
+
+        const animateStars = () => {
+            ctx.fillStyle = 'rgba(3, 3, 3, 0.4)';
+            ctx.fillRect(0, 0, width, height);
+
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+            requestAnimationFrame(animateStars);
+        };
+
+        // Mouse interaction for speed control
+        window.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / width) - 0.5;
+            const y = (e.clientY / height) - 0.5;
+            speed = 0.5 + (x * x + y * y) * 2;
+        });
+
+        window.addEventListener('resize', resize);
+        resize();
+        initStars();
+        animateStars();
+    </script>
+</body>
+</html>
