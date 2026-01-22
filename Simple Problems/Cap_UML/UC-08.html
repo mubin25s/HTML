@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC-08: Vendor Service Request</title>
+    <style>
+        body { font-family: "Times New Roman", Times, serif; margin: 40px; }
+        h1 { text-align: center; margin-bottom: 20px; font-size: 24px; font-weight: bold; }
+        table.main-table { width: 100%; border-collapse: collapse; border: 2px solid black; }
+        table.main-table > tbody > tr > td { border: 1px solid black; }
+    </style>
+</head>
+<body>
+    <h1>Use Case Description</h1>
+    <table class="main-table">
+        <tbody>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Use Case</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Vendor Service Request</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Goal</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">To allow Organizers to request services (catering, photography) from registered vendors.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Preconditions</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Vendor is active; Organizer has an active event.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Success End Condition</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Service request is sent to the Vendor.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Failed End Condition</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Request fails to send.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Primary Actors</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Event Organizer</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Secondary Actors</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Vendor</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Trigger</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Organizer browses Vendor Marketplace.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Description / Main Success Scenario</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Action</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">1</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer browses/searches for vendors by category (e.g., Catering).</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">2</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer views Vendor Profile (Reviews, Pricing, Portfolio).</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">3</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer clicks "Request Quote" or "Book Service".</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">4</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer provides event details (Date, Pax, Special Requirements).</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">5</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer sends request.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">6</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System notifies Vendor of new lead.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">7</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Vendor accepts request and provides quote.</td></tr></tbody></table></td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Alternative Flows</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Branching Action</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">1a</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>No Results</b>: System suggests "Broaden your search".</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">7a</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>Vendor Unavailable</b>: Vendor declines request. System notifies Organizer to find alternative.</td></tr></tbody></table></td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Quality Requirements</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Requirement</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">6</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Vendor must receive notification via Dashboard and Email instantly.</td></tr></tbody></table></td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

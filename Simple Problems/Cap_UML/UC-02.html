@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC-02: Admin User Management</title>
+    <style>
+        body { font-family: "Times New Roman", Times, serif; margin: 40px; }
+        h1 { text-align: center; margin-bottom: 20px; font-size: 24px; font-weight: bold; }
+        table.main-table { width: 100%; border-collapse: collapse; border: 2px solid black; }
+        table.main-table > tbody > tr > td { border: 1px solid black; }
+    </style>
+</head>
+<body>
+    <h1>Use Case Description</h1>
+    <table class="main-table">
+        <tbody>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Use Case</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Admin User Management</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Goal</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">To allow the Administrator to manage system users (approve, block, delete, or update roles).</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Preconditions</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Admin is logged in and has "Super User" privileges.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Success End Condition</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">User status is updated in the system database.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Failed End Condition</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">User status remains unchanged; Admin receives an error notification.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Primary Actors</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Administrator</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Secondary Actors</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">System Database</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Trigger</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Admin navigates to the "User Management" section of the dashboard.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Description / Main Success Scenario</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Action</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">1</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Admin selects "User Management" from the navigation menu.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">2</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System displays a list of all registered users with their statuses.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">3</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Admin searches for a specific user or filters by role/status.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">4</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Admin selects a user and chooses an action (e.g., "Approve Vendor", "Ban User").</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">5</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System prompts for confirmation.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">6</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Admin confirms the action.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">7</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System updates the user's record in the database.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">8</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System notifies the affected user via email (if applicable).</td></tr></tbody></table></td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Alternative Flows</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Branching Action</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">3a</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>User Not Found</b>: System displays "No users matching criteria". Admin clears filters.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">7a</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>Database Error</b>: System fails to update record. Displays "System Error, try again later".</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">7b</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>Self-Modification</b>: Admin tries to ban themselves. System allows "Logout" but prevents "Ban" on self-session.</td></tr></tbody></table></td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Quality Requirements</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Requirement</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">2</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">User list should load 50 records within 3 seconds.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">7</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Database update must be atomic and confirmed immediately.</td></tr></tbody></table></td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

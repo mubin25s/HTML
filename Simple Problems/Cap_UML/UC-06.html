@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC-06: Budget Planning</title>
+    <style>
+        body { font-family: "Times New Roman", Times, serif; margin: 40px; }
+        h1 { text-align: center; margin-bottom: 20px; font-size: 24px; font-weight: bold; }
+        table.main-table { width: 100%; border-collapse: collapse; border: 2px solid black; }
+        table.main-table > tbody > tr > td { border: 1px solid black; }
+    </style>
+</head>
+<body>
+    <h1>Use Case Description</h1>
+    <table class="main-table">
+        <tbody>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Use Case</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Budget Planning</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Goal</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">To create and track a financial budget for the event, including projected and actual expenses.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Preconditions</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Event exists.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Success End Condition</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Budget is defined and balanced.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Failed End Condition</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Budget data is lost.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Primary Actors</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Event Organizer</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Secondary Actors</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">None</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Trigger</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Organizer accesses "Budget" tab.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Description / Main Success Scenario</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Action</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">1</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer opens "Budget Manager".</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">2</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System displays detailed categories (Venue, Catering, Marketing).</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">3</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer sets "Total Budget Amount".</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">4</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer adds line items for estimated costs.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">5</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System calculates "Remaining Budget" in real-time.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">6</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">As expenses occur, Organizer enters "Actual Cost".</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">7</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System updates variance (Estimated vs Actual).</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">8</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer saves the budget report.</td></tr></tbody></table></td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Alternative Flows</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Branching Action</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">5a</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>Over Budget</b>: Total estimated costs exceed Total Budget. System highlights negative balance in red.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">6a</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>Unexpected Expense</b>: Organizer adds a new category "Miscellaneous".</td></tr></tbody></table></td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Quality Requirements</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Requirement</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">5</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Calculations must be accurate to 2 decimal places.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">7</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Visual indicators (charts/graphs) should update immediately upon data entry.</td></tr></tbody></table></td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

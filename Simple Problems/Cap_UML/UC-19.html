@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC-19: Event Closure & Logout</title>
+    <style>
+        body { font-family: "Times New Roman", Times, serif; margin: 40px; }
+        h1 { text-align: center; margin-bottom: 20px; font-size: 24px; font-weight: bold; }
+        table.main-table { width: 100%; border-collapse: collapse; border: 2px solid black; }
+        table.main-table > tbody > tr > td { border: 1px solid black; }
+    </style>
+</head>
+<body>
+    <h1>Use Case Description</h1>
+    <table class="main-table">
+        <tbody>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Use Case</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Event Closure & Logout</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Goal</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">To formally close an event and securely terminate the user session.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Preconditions</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Event date passed OR User wants to leave.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Success End Condition</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Event state = "Closed" OR User session destroyed.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Failed End Condition</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">None.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Primary Actors</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Organizer / Any User</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Secondary Actors</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">System</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Trigger</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">"Close Event" or "Logout".</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Description / Main Success Scenario</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Action</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">1</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>(Flow A: Close Event)</b> Organizer clicks "Close Event".</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">2</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System archives event data.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">3</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System restricts further registrations/edits.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">4</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>(Flow B: Logout)</b> User clicks "Logout".</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">5</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System invalidates session token.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">6</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System redirects to Homepage.</td></tr></tbody></table></td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Alternative Flows</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Branching Action</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">4a</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>Auto-Logout</b>: System detects inactivity > 30mins. Logs out user automatically.</td></tr></tbody></table></td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Quality Requirements</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Requirement</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">5</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Session data must be completely cleared from browser cache/storage directives.</td></tr></tbody></table></td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

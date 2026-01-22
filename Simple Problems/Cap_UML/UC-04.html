@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC-04: Update & Manage Event</title>
+    <style>
+        body { font-family: "Times New Roman", Times, serif; margin: 40px; }
+        h1 { text-align: center; margin-bottom: 20px; font-size: 24px; font-weight: bold; }
+        table.main-table { width: 100%; border-collapse: collapse; border: 2px solid black; }
+        table.main-table > tbody > tr > td { border: 1px solid black; }
+    </style>
+</head>
+<body>
+    <h1>Use Case Description</h1>
+    <table class="main-table">
+        <tbody>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Use Case</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Update & Manage Event</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Goal</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">To allow Organizers to modify details of an existing event.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Preconditions</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Event exists and Organizer has ownership permissions.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Success End Condition</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Event details are updated and saved.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Failed End Condition</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Changes are discarded; Event remains in previous state.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Primary Actors</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Event Organizer</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Secondary Actors</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Registered Attendees (Notification recipients)</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Trigger</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Organizer selects an event and clicks "Edit".</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Description / Main Success Scenario</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Action</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">1</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer navigates to "My Events" list.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">2</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer selects the specific event and clicks "Edit".</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">3</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System loads current event details into editable fields.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">4</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer modifies necessary information (e.g., changes time, updates description).</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">5</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer clicks "Save Changes".</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">6</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System validates the changes.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">7</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System updates the event record.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">8</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">IF event is published, System prompts "Notify Attendees of changes?".</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">9</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Organizer confirms. System triggers notifications.</td></tr></tbody></table></td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Alternative Flows</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Branching Action</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">6a</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>Validation Failure</b>: New data is invalid (e.g., End time before Start time). System shows error.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">9a</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>No Notification</b>: Organizer chooses not to notify attendees. System saves silently.</td></tr></tbody></table></td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Quality Requirements</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Requirement</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">3</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Form should pre-fill with existing data in < 1 second.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">9</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Notifications should be queued for delivery within 1 minute of confirmation.</td></tr></tbody></table></td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

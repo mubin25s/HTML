@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UC-01: Login & Registration</title>
+    <style>
+        body { font-family: "Times New Roman", Times, serif; margin: 40px; }
+        h1 { text-align: center; margin-bottom: 20px; font-size: 24px; font-weight: bold; }
+        table.main-table { width: 100%; border-collapse: collapse; border: 2px solid black; }
+        table.main-table > tbody > tr > td { border: 1px solid black; }
+    </style>
+</head>
+<body>
+    <h1>Use Case Description</h1>
+    <table class="main-table">
+        <tbody>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Use Case</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Login & Registration</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Goal</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">To allow users (Admins, Organizers, Vendors, Attendees) to register for an account and log in to access system features.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Preconditions</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">System is online and accessible. User has a valid email address (for registration).</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Success End Condition</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">User is successfully authenticated and redirected to their respective dashboard.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Failed End Condition</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">User remains on the login/registration page with an error message displaying the reason for failure.</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Primary Actors</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Guest (Unregistered User), Registered User</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Secondary Actors</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">Email Service Provider (for verification)</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Trigger</td>
+            <td style="border: 1px solid black; padding: 8px; vertical-align: top;">User navigates to the EventHive homepage and selects "Login" or "Register".</td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Description / Main Success Scenario</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Action</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">1</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">User opens the EventHive application.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">2</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">User travels to the Login/Register page.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">3</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">User selects "Register" and fills in required details (Name, Email, Password, Role).</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">4</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">User submits the registration form.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">5</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System validates the input and sends a verification email.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">6</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">User verifies email and returns to the login page.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">7</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">User enters valid credentials (Email, Password) and clicks "Login".</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">8</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System authenticates the user and retrieves their role.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">9</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">System redirects the user to the appropriate dashboard.</td></tr></tbody></table></td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Alternative Flows</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Branching Action</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">5a</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>Invalid Input Data</b>: System displays validation errors (e.g., "Email already in use", "Weak password"). User corrects information and resubmits.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">8a</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>Invalid Credentials</b>: System displays "Incorrect email or password". User retries.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">8b</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>Account Suspended</b>: System displays "Account suspended, contact Admin". Use Case ends.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">8c</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;"><b>Forgot Password</b>: User clicks "Forgot Password". System initiates password recovery flow (UC-Recovery).</td></tr></tbody></table></td>
+        </tr>
+            
+        <tr>
+            <td style="border: 1px solid black; padding: 8px; font-weight: bold; width: 25%; vertical-align: top;">Quality Requirements</td>
+            <td style="border: 1px solid black; padding: 0; vertical-align: top;"><table style="width: 100%; border-collapse: collapse; border: none; margin: 0;"><thead><tr><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Step</th><th style="border: 1px solid black; padding: 4px; background-color: #f2f2f2; font-weight: bold; text-align: left;">Requirement</th></tr></thead><tbody><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">5</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Validation feedback should appear within 2 seconds of submission.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">8</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Authentication process should take no longer than 3 seconds.</td></tr><tr><td style="border: 1px solid black; padding: 4px; vertical-align: top;">9</td><td style="border: 1px solid black; padding: 4px; vertical-align: top;">Dashboard should load within 5 seconds after successful login.</td></tr></tbody></table></td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>
