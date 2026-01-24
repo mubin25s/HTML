@@ -312,7 +312,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>🤖 DFA Visualizer & Simulator</h1>
+            <h1>DFA Visualizer & Simulator</h1>
             <p class="subtitle">Deterministic Finite Automaton - Interactive Tool</p>
         </header>
 
@@ -679,20 +679,27 @@
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
             
-            // Set canvas size
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
+            // High DPI Scaling
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
             
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            
+            // Clear with white background
+            ctx.clearRect(0, 0, rect.width, rect.height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, rect.width, rect.height);
 
             const numStates = dfa.states.length;
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const radius = Math.min(canvas.width, canvas.height) * 0.25;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const radius = Math.min(rect.width, rect.height) * 0.25;
             
             const statePositions = {};
             
-            // Calculate positions for states in a circle
+            // Calculate positions
             dfa.states.forEach((state, i) => {
                 const angle = (2 * Math.PI * i) / numStates - Math.PI / 2;
                 const x = centerX + radius * Math.cos(angle);
@@ -700,149 +707,169 @@
                 statePositions[state] = { x, y };
             });
 
-            // Draw transitions
-            ctx.strokeStyle = '#667eea';
-            ctx.lineWidth = 2;
-            ctx.fillStyle = '#667eea';
-            ctx.font = 'bold 16px Inter';
+            // Styling Constants
+            const mainColor = '#1a365d'; // Dark Blue
+            const accentColor = '#2b6cb0'; // Medium Blue
+            const stateRadius = 35;
+            const lineWidth = 2.5;
+            const arrowSize = 12;
 
+            ctx.strokeStyle = mainColor;
+            ctx.lineWidth = lineWidth;
+            ctx.fillStyle = mainColor;
+            ctx.font = 'bold 16px Inter';
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            // Draw transitions
             for (const fromState in dfa.transitions) {
+                // Group transitions by destination to avoid duplicate arrows
+                const targets = {};
                 for (const symbol in dfa.transitions[fromState]) {
                     const toState = dfa.transitions[fromState][symbol];
+                    if (!targets[toState]) targets[toState] = [];
+                    targets[toState].push(symbol);
+                }
+
+                for (const toState in targets) {
+                    const symbols = targets[toState].join(',');
                     const from = statePositions[fromState];
                     const to = statePositions[toState];
 
                     if (fromState === toState) {
-                        // Self-loop
-                        const loopRadius = 30;
+                        // Self-loop (Sharper & Clearer)
                         const angle = Math.atan2(from.y - centerY, from.x - centerX);
-                        const loopX = from.x + 50 * Math.cos(angle);
-                        const loopY = from.y + 50 * Math.sin(angle);
+                        const loopRadius = 24;
+                        const loopDist = 55; // Distance from state center
+                        const loopX = from.x + loopDist * Math.cos(angle);
+                        const loopY = from.y + loopDist * Math.sin(angle);
 
                         ctx.beginPath();
                         ctx.arc(loopX, loopY, loopRadius, 0, 2 * Math.PI);
                         ctx.stroke();
 
-                        // Arrow
-                        const arrowAngle = angle + Math.PI / 4;
-                        const arrowX = loopX + loopRadius * Math.cos(arrowAngle);
-                        const arrowY = loopY + loopRadius * Math.sin(arrowAngle);
-                        drawArrow(ctx, arrowX, arrowY, arrowAngle - Math.PI / 2);
+                        // Arrow for loop
+                        // Calculate intersection where circle meets state
+                        const arrowAngle = angle + 2.5; // Offset slightly
+                        const arrowTipX = loopX + loopRadius * Math.cos(arrowAngle);
+                        const arrowTipY = loopY + loopRadius * Math.sin(arrowAngle);
+                        drawArrow(ctx, arrowTipX, arrowTipY, arrowAngle + Math.PI/2, arrowSize);
 
                         // Label
-                        ctx.fillText(symbol, loopX, loopY - loopRadius - 10);
+                        drawLabel(ctx, symbols, loopX, loopY - loopRadius - 12);
                     } else {
-                        // Draw curved line
+                        // Curved line
                         const midX = (from.x + to.x) / 2;
                         const midY = (from.y + to.y) / 2;
                         
-                        // Calculate curve control point
                         const angle = Math.atan2(to.y - from.y, to.x - from.x);
-                        // Increase curve slightly for better separation
-                        const curveOffset = 40; 
+                        const curveOffset = 50; // More curvature for clarity
                         const ctrlX = midX + curveOffset * Math.cos(angle + Math.PI / 2);
                         const ctrlY = midY + curveOffset * Math.sin(angle + Math.PI / 2);
 
                         ctx.beginPath();
                         ctx.moveTo(from.x, from.y);
-                        // Connect to center but we'll cover it with state circle
                         ctx.quadraticCurveTo(ctrlX, ctrlY, to.x, to.y);
                         ctx.stroke();
 
-                        // Arrow Calculation - Position exactly at state boundary
-                        const stateRadius = 40;
-                        // Calculate angle from control point to destination center
-                        // This gives us the tangent of the curve as it approaches the destination
+                        // Arrow at boundary
                         const approachAngle = Math.atan2(to.y - ctrlY, to.x - ctrlX);
+                        const arrowX = to.x - (stateRadius + 5) * Math.cos(approachAngle);
+                        const arrowY = to.y - (stateRadius + 5) * Math.sin(approachAngle);
                         
-                        // Back off from center by radius + small padding for the arrowhead tip
-                        const arrowX = to.x - (stateRadius + 3) * Math.cos(approachAngle);
-                        const arrowY = to.y - (stateRadius + 3) * Math.sin(approachAngle);
-                        
-                        drawArrow(ctx, arrowX, arrowY, approachAngle);
+                        drawArrow(ctx, arrowX, arrowY, approachAngle, arrowSize);
 
-                        // Label - Place at the peak of the curve (t=0.5)
-                        // Formula for Quadratic Bezier at t=0.5 is (P0 + 2P1 + P2) / 4
+                        // Label
                         const labelX = (from.x + 2 * ctrlX + to.x) / 4;
                         const labelY = (from.y + 2 * ctrlY + to.y) / 4;
-                        
-                        // Add a small background for text readability
-                        const textMetrics = ctx.measureText(symbol);
-                        const textPadding = 4;
-                        ctx.save();
-                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                        ctx.fillRect(
-                            labelX - textMetrics.width/2 - textPadding, 
-                            labelY - 8 - textPadding, 
-                            textMetrics.width + textPadding*2, 
-                            16 + textPadding*2
-                        );
-                        ctx.restore();
-                        
-                        ctx.fillText(symbol, labelX, labelY);
+                        drawLabel(ctx, symbols, labelX, labelY);
                     }
                 }
             }
 
-            // Draw states
+            // Draw states (On top of lines)
             dfa.states.forEach(state => {
                 const pos = statePositions[state];
-                const stateRadius = 40;
 
-                // Draw circle
+                // Background
                 ctx.beginPath();
                 ctx.arc(pos.x, pos.y, stateRadius, 0, 2 * Math.PI);
-                ctx.fillStyle = '#fff';
+                ctx.fillStyle = '#ffffff';
                 ctx.fill();
-                ctx.strokeStyle = '#667eea';
+                
+                // Border
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, stateRadius, 0, 2 * Math.PI);
+                ctx.strokeStyle = mainColor;
                 ctx.lineWidth = 3;
                 ctx.stroke();
 
-                // Draw double circle for accept states
+                // Double circle for accept
                 if (dfa.acceptStates.includes(state)) {
                     ctx.beginPath();
-                    ctx.arc(pos.x, pos.y, stateRadius - 5, 0, 2 * Math.PI);
+                    ctx.arc(pos.x, pos.y, stateRadius - 6, 0, 2 * Math.PI);
+                    ctx.strokeStyle = mainColor;
+                    ctx.lineWidth = 2;
                     ctx.stroke();
                 }
 
-                // Draw state label
-                ctx.fillStyle = '#333';
-                ctx.font = 'bold 18px Inter';
+                // Text
+                ctx.fillStyle = '#000000';
+                ctx.font = 'bold 20px Inter';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(state, pos.x, pos.y);
 
-                // Mark start state with arrow
+                // Start Arrow
                 if (state === dfa.startState) {
                     const angle = Math.atan2(pos.y - centerY, pos.x - centerX);
-                    const startX = pos.x - (stateRadius + 60) * Math.cos(angle);
-                    const startY = pos.y - (stateRadius + 60) * Math.sin(angle);
-                    const endX = pos.x - stateRadius * Math.cos(angle);
-                    const endY = pos.y - stateRadius * Math.sin(angle);
+                    const startDist = 60;
+                    const startX = pos.x - (stateRadius + startDist) * Math.cos(angle);
+                    const startY = pos.y - (stateRadius + startDist) * Math.sin(angle);
+                    const endX = pos.x - (stateRadius + 5) * Math.cos(angle);
+                    const endY = pos.y - (stateRadius + 5) * Math.sin(angle);
 
-                    ctx.strokeStyle = '#764ba2';
+                    ctx.strokeStyle = accentColor;
                     ctx.lineWidth = 3;
                     ctx.beginPath();
                     ctx.moveTo(startX, startY);
                     ctx.lineTo(endX, endY);
                     ctx.stroke();
-                    drawArrow(ctx, endX, endY, angle);
+                    drawArrow(ctx, endX, endY, angle, arrowSize + 2);
                 }
             });
         }
 
-        function drawArrow(ctx, x, y, angle) {
-            const arrowSize = 12;
+        function drawArrow(ctx, x, y, angle, size) {
             ctx.save();
             ctx.translate(x, y);
             ctx.rotate(angle);
             ctx.beginPath();
             ctx.moveTo(0, 0);
-            ctx.lineTo(-arrowSize, -arrowSize / 2);
-            ctx.lineTo(-arrowSize, arrowSize / 2);
+            ctx.lineTo(-size, -size / 1.5);
+            ctx.lineTo(-size, size / 1.5);
             ctx.closePath();
-            ctx.fillStyle = '#667eea';
+            ctx.fillStyle = '#1a365d';
             ctx.fill();
+            ctx.restore();
+        }
+
+        function drawLabel(ctx, text, x, y) {
+            ctx.font = 'bold 16px Inter';
+            const metrics = ctx.measureText(text);
+            const padding = 4;
+            
+            ctx.save();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fillRect(x - metrics.width/2 - padding, y - 10 - padding, metrics.width + padding*2, 20 + padding*2);
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x - metrics.width/2 - padding, y - 10 - padding, metrics.width + padding*2, 20 + padding*2);
+            
+            ctx.fillStyle = '#2d3748';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, x, y);
             ctx.restore();
         }
 
