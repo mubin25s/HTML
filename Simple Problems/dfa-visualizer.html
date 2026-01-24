@@ -699,9 +699,10 @@
             
             const statePositions = {};
             
-            // Calculate positions
+            // Calculate positions for states in a circle
             dfa.states.forEach((state, i) => {
-                const angle = (2 * Math.PI * i) / numStates - Math.PI / 2;
+                // Start a Math.PI (Left side) instead of -Math.PI/2 (Top)
+                const angle = (2 * Math.PI * i) / numStates + Math.PI;
                 const x = centerX + radius * Math.cos(angle);
                 const y = centerY + radius * Math.sin(angle);
                 statePositions[state] = { x, y };
@@ -762,13 +763,16 @@
                         const midX = (from.x + to.x) / 2;
                         const midY = (from.y + to.y) / 2;
                         
+                        // Calculate curve control point
                         const angle = Math.atan2(to.y - from.y, to.x - from.x);
+                        // Increase curve slightly for better separation
                         const curveOffset = 50; // More curvature for clarity
                         const ctrlX = midX + curveOffset * Math.cos(angle + Math.PI / 2);
                         const ctrlY = midY + curveOffset * Math.sin(angle + Math.PI / 2);
 
                         ctx.beginPath();
                         ctx.moveTo(from.x, from.y);
+                        // Connect to center but we'll cover it with state circle
                         ctx.quadraticCurveTo(ctrlX, ctrlY, to.x, to.y);
                         ctx.stroke();
 
@@ -820,14 +824,17 @@
                 ctx.textBaseline = 'middle';
                 ctx.fillText(state, pos.x, pos.y);
 
-                // Start Arrow
+                // Start Arrow - FROM OUTSIDE POINTING IN
                 if (state === dfa.startState) {
                     const angle = Math.atan2(pos.y - centerY, pos.x - centerX);
                     const startDist = 60;
-                    const startX = pos.x - (stateRadius + startDist) * Math.cos(angle);
-                    const startY = pos.y - (stateRadius + startDist) * Math.sin(angle);
-                    const endX = pos.x - (stateRadius + 5) * Math.cos(angle);
-                    const endY = pos.y - (stateRadius + 5) * Math.sin(angle);
+                    
+                    // Use PLUS (+) to go OUTWARDS from the center passing through the state
+                    // This puts the arrow source OUTSIDE the circle
+                    const startX = pos.x + (stateRadius + startDist) * Math.cos(angle);
+                    const startY = pos.y + (stateRadius + startDist) * Math.sin(angle);
+                    const endX = pos.x + (stateRadius + 5) * Math.cos(angle);
+                    const endY = pos.y + (stateRadius + 5) * Math.sin(angle);
 
                     ctx.strokeStyle = accentColor;
                     ctx.lineWidth = 3;
@@ -835,7 +842,9 @@
                     ctx.moveTo(startX, startY);
                     ctx.lineTo(endX, endY);
                     ctx.stroke();
-                    drawArrow(ctx, endX, endY, angle, arrowSize + 2);
+                    
+                    // Point arrow towards proper angle (Towards Center = Angle + PI)
+                    drawArrow(ctx, endX, endY, angle + Math.PI, arrowSize + 2);
                 }
             });
         }
