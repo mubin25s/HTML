@@ -321,26 +321,9 @@
                 <h2 style="margin-bottom: 20px;">Define Your DFA</h2>
                 
                 <div class="form-group">
-                    <label>States (comma-separated)</label>
-                    <input type="text" id="states" placeholder="q0, q1, q2">
-                    <p class="help-text">Example: q0, q1, q2</p>
-                </div>
-
-                <div class="form-group">
                     <label>Alphabet (comma-separated)</label>
                     <input type="text" id="alphabet" placeholder="a, b">
                     <p class="help-text">Example: a, b or 0, 1</p>
-                </div>
-
-                <div class="form-group">
-                    <label>Start State</label>
-                    <input type="text" id="startState" placeholder="q0">
-                </div>
-
-                <div class="form-group">
-                    <label>Accept States (comma-separated)</label>
-                    <input type="text" id="acceptStates" placeholder="q2">
-                    <p class="help-text">Example: q2 or q1, q3</p>
                 </div>
 
                 <div class="form-group">
@@ -397,16 +380,159 @@
             let startState = 'q0';
             let acceptStates = [];
 
-            // Pattern: starts with X ends with Y
-            const startsEndsPattern = /starts?\s+with\s+(\w+)\s+(?:and\s+)?ends?\s+with\s+(\w+)/i;
-            const startsMatch = desc.match(startsEndsPattern);
-            
-            if (startsMatch) {
-                const startChar = startsMatch[1];
-                const endChar = startsMatch[2];
+            // Check if it's a direct string pattern (like "abba", "abc", etc.)
+            // This checks if the description is just the pattern itself without extra words
+            const directStringPattern = /^[a-z0-9]+$/i;
+            if (directStringPattern.test(desc)) {
+                const pattern = desc;
                 
-                states = ['q0', 'q1', 'q2', 'q3'];
-                acceptStates = ['q3'];
+                // Create states q0, q1, q2, ... for each character, plus trap state
+                states = ['q0'];
+                for (let i = 1; i <= pattern.length; i++) {
+                    states.push('q' + i);
+                }
+                states.push('qT'); // Trap state
+                
+                acceptStates = ['q' + pattern.length];
+                
+                // Initialize all transitions
+                states.forEach(state => {
+                    transitions[state] = {};
+                });
+                
+                // Build sequential transitions
+                for (let i = 0; i < pattern.length; i++) {
+                    const currentState = 'q' + i;
+                    const nextState = 'q' + (i + 1);
+                    const expectedChar = pattern[i];
+                    
+                    alphabet.forEach(symbol => {
+                        if (symbol === expectedChar) {
+                            transitions[currentState][symbol] = nextState;
+                        } else {
+                            transitions[currentState][symbol] = 'qT';
+                        }
+                    });
+                }
+                
+                // Accept state and trap state loop to themselves
+                const finalState = 'q' + pattern.length;
+                alphabet.forEach(symbol => {
+                    transitions[finalState][symbol] = finalState;
+                    transitions['qT'][symbol] = 'qT';
+                });
+                
+                return { states, transitions, startState, acceptStates };
+            }
+
+            // Pattern: "contains substring X" or "contains X"
+            const containsPattern = /contains?\s+(?:substring\s+)?([a-z0-9]+)/i;
+            const containsMatch = desc.match(containsPattern);
+            
+            if (containsMatch) {
+                const substring = containsMatch[1];
+                
+                // Create states for substring matching
+                states = ['q0'];
+                for (let i = 1; i <= substring.length; i++) {
+                    states.push('q' + i);
+                }
+                
+                acceptStates = ['q' + substring.length];
+                
+                // Initialize all transitions
+                states.forEach(state => {
+                    transitions[state] = {};
+                });
+                
+                // Build pattern matching transitions
+                for (let i = 0; i < substring.length; i++) {
+                    const currentState = 'q' + i;
+                    const expectedChar = substring[i];
+                    
+                    alphabet.forEach(symbol => {
+                        if (symbol === expectedChar) {
+                            transitions[currentState][symbol] = 'q' + (i + 1);
+                        } else if (i > 0 && symbol === substring[0]) {
+                            transitions[currentState][symbol] = 'q1';
+                        } else {
+                            transitions[currentState][symbol] = 'q0';
+                        }
+                    });
+                }
+                
+                // Accept state stays in accept
+                const finalState = 'q' + substring.length;
+                alphabet.forEach(symbol => {
+                    transitions[finalState][symbol] = finalState;
+                });
+                
+                return { states, transitions, startState, acceptStates };
+            }
+
+            // Pattern: "ends with X"
+            const endsPattern = /ends?\s+with\s+([a-z0-9]+)/i;
+            const endsMatch = desc.match(endsPattern);
+            
+            if (endsMatch) {
+                const pattern = endsMatch[1];
+                
+                // Create states for pattern matching
+                states = ['q0'];
+                for (let i = 1; i <= pattern.length; i++) {
+                    states.push('q' + i);
+                }
+                
+                acceptStates = ['q' + pattern.length];
+                
+                // Initialize all transitions
+                states.forEach(state => {
+                    transitions[state] = {};
+                });
+                
+                // Build pattern matching transitions
+                for (let i = 0; i < pattern.length; i++) {
+                    const currentState = 'q' + i;
+                    const expectedChar = pattern[i];
+                    
+                    alphabet.forEach(symbol => {
+                        if (symbol === expectedChar) {
+                            transitions[currentState][symbol] = 'q' + (i + 1);
+                        } else if (symbol === pattern[0]) {
+                            transitions[currentState][symbol] = 'q1';
+                        } else {
+                            transitions[currentState][symbol] = 'q0';
+                        }
+                    });
+                }
+                
+                // Final state loops back on wrong input
+                const finalState = 'q' + pattern.length;
+                alphabet.forEach(symbol => {
+                    if (symbol === pattern[pattern.length - 1]) {
+                        transitions[finalState][symbol] = finalState;
+                    } else if (symbol === pattern[0]) {
+                        transitions[finalState][symbol] = 'q1';
+                    } else {
+                        transitions[finalState][symbol] = 'q0';
+                    }
+                });
+                
+                return { states, transitions, startState, acceptStates };
+            }
+
+            // Pattern: "starts with X and ends with Y" or "starts with X ends with Y"
+            const startsEndsPattern = /starts?\s+with\s+([a-z0-9]+)\s+(?:and\s+)?ends?\s+with\s+([a-z0-9]+)/i;
+            const startsEndsMatch = desc.match(startsEndsPattern);
+            
+            if (startsEndsMatch) {
+                const startPattern = startsEndsMatch[1];
+                const endPattern = startsEndsMatch[2];
+                const combined = startPattern + endPattern;
+                
+                // Create states based on combined pattern
+                states = ['q0', 'q1', 'qT'];
+                acceptStates = ['q1'];
                 
                 // Initialize all transitions
                 states.forEach(state => {
@@ -414,150 +540,70 @@
                 });
                 
                 alphabet.forEach(symbol => {
-                    if (symbol === startChar) {
+                    if (symbol === startPattern) {
                         transitions['q0'][symbol] = 'q1';
                         transitions['q1'][symbol] = 'q1';
-                        transitions['q2'][symbol] = 'q2';
-                        transitions['q3'][symbol] = 'q2';
-                    } else if (symbol === endChar) {
-                        transitions['q0'][symbol] = 'q2';
-                        transitions['q1'][symbol] = 'q3';
-                        transitions['q2'][symbol] = 'q2';
-                        transitions['q3'][symbol] = 'q3';
+                        transitions['qT'][symbol] = 'qT';
+                    } else if (symbol === endPattern) {
+                        transitions['q0'][symbol] = 'qT';
+                        transitions['q1'][symbol] = 'q1';
+                        transitions['qT'][symbol] = 'qT';
                     } else {
-                        // All other symbols go to reject state
-                        transitions['q0'][symbol] = 'q2';
-                        transitions['q1'][symbol] = 'q2';
-                        transitions['q2'][symbol] = 'q2';
-                        transitions['q3'][symbol] = 'q2';
+                        transitions['q0'][symbol] = 'qT';
+                        transitions['q1'][symbol] = 'q1';
+                        transitions['qT'][symbol] = 'qT';
                     }
                 });
                 
                 return { states, transitions, startState, acceptStates };
             }
 
-            // Pattern: starts with X
-            const startsOnlyPattern = /starts?\s+with\s+(\w+)/i;
-            const startsOnlyMatch = desc.match(startsOnlyPattern);
+            // Pattern: "starts with X"
+            const startsPattern = /starts?\s+with\s+([a-z0-9]+)/i;
+            const startsMatch = desc.match(startsPattern);
             
-            if (startsOnlyMatch) {
-                const startChar = startsOnlyMatch[1];
-                
-                states = ['q0', 'q1', 'q2'];
-                acceptStates = ['q1'];
-                
-                alphabet.forEach(symbol => {
-                    if (symbol === startChar) {
-                        transitions['q0'] = transitions['q0'] || {};
-                        transitions['q0'][symbol] = 'q1';
-                        
-                        transitions['q1'] = transitions['q1'] || {};
-                        transitions['q1'][symbol] = 'q1';
-                        
-                        transitions['q2'] = transitions['q2'] || {};
-                        transitions['q2'][symbol] = 'q2';
-                    } else {
-                        transitions['q0'] = transitions['q0'] || {};
-                        transitions['q0'][symbol] = 'q2';
-                        
-                        transitions['q1'] = transitions['q1'] || {};
-                        transitions['q1'][symbol] = 'q1';
-                        
-                        transitions['q2'] = transitions['q2'] || {};
-                        transitions['q2'][symbol] = 'q2';
-                    }
-                });
-                
-                return { states, transitions, startState, acceptStates };
-            }
-
-            // Pattern: ends with X
-            const endsPattern = /ends?\s+with\s+(\w+)/i;
-            const endsMatch = desc.match(endsPattern);
-            
-            if (endsMatch) {
-                const endChar = endsMatch[1];
-                
-                if (endChar.length === 1) {
-                    states = ['q0', 'q1'];
-                    acceptStates = ['q1'];
-                    
-                    alphabet.forEach(symbol => {
-                        if (symbol === endChar) {
-                            transitions['q0'] = transitions['q0'] || {};
-                            transitions['q0'][symbol] = 'q1';
-                            
-                            transitions['q1'] = transitions['q1'] || {};
-                            transitions['q1'][symbol] = 'q1';
-                        } else {
-                            transitions['q0'] = transitions['q0'] || {};
-                            transitions['q0'][symbol] = 'q0';
-                            
-                            transitions['q1'] = transitions['q1'] || {};
-                            transitions['q1'][symbol] = 'q0';
-                        }
-                    });
-                } else {
-                    // Multiple character ending (e.g., "01")
-                    states = ['q0'];
-                    for (let i = 0; i < endChar.length; i++) {
-                        states.push('q' + (i + 1));
-                    }
-                    acceptStates = ['q' + endChar.length];
-                    
-                    // Build transitions for substring matching
-                    states.forEach((state, idx) => {
-                        alphabet.forEach(symbol => {
-                            transitions[state] = transitions[state] || {};
-                            
-                            if (idx < endChar.length && symbol === endChar[idx]) {
-                                transitions[state][symbol] = 'q' + (idx + 1);
-                            } else if (idx > 0 && symbol === endChar[0]) {
-                                transitions[state][symbol] = 'q1';
-                            } else {
-                                transitions[state][symbol] = 'q0';
-                            }
-                        });
-                    });
-                }
-                
-                return { states, transitions, startState, acceptStates };
-            }
-
-            // Pattern: contains substring X
-            const containsPattern = /contains?\s+(?:substring\s+)?(\w+)/i;
-            const containsMatch = desc.match(containsPattern);
-            
-            if (containsMatch) {
-                const substring = containsMatch[1];
+            if (startsMatch) {
+                const pattern = startsMatch[1];
                 
                 states = ['q0'];
-                for (let i = 0; i < substring.length; i++) {
-                    states.push('q' + (i + 1));
+                for (let i = 1; i <= pattern.length; i++) {
+                    states.push('q' + i);
                 }
-                acceptStates = ['q' + substring.length];
+                states.push('qT');
                 
-                states.forEach((state, idx) => {
+                acceptStates = ['q' + pattern.length];
+                
+                // Initialize all transitions
+                states.forEach(state => {
+                    transitions[state] = {};
+                });
+                
+                // Build sequential pattern
+                for (let i = 0; i < pattern.length; i++) {
+                    const currentState = 'q' + i;
+                    const expectedChar = pattern[i];
+                    
                     alphabet.forEach(symbol => {
-                        transitions[state] = transitions[state] || {};
-                        
-                        if (idx === substring.length) {
-                            transitions[state][symbol] = state;
-                        } else if (symbol === substring[idx]) {
-                            transitions[state][symbol] = 'q' + (idx + 1);
-                        } else if (symbol === substring[0]) {
-                            transitions[state][symbol] = 'q1';
+                        if (symbol === expectedChar) {
+                            transitions[currentState][symbol] = 'q' + (i + 1);
                         } else {
-                            transitions[state][symbol] = 'q0';
+                            transitions[currentState][symbol] = 'qT';
                         }
                     });
+                }
+                
+                // Accept state continues accepting anything
+                const finalState = 'q' + pattern.length;
+                alphabet.forEach(symbol => {
+                    transitions[finalState][symbol] = finalState;
+                    transitions['qT'][symbol] = 'qT';
                 });
                 
                 return { states, transitions, startState, acceptStates };
             }
 
             // Pattern: even/odd number of X
-            const parityPattern = /(even|odd)\s+(?:number\s+of\s+)?(\w+)/i;
+            const parityPattern = /(even|odd)\s+(?:number\s+of\s+)?([a-z0-9])/i;
             const parityMatch = desc.match(parityPattern);
             
             if (parityMatch) {
@@ -567,18 +613,16 @@
                 states = ['q0', 'q1'];
                 acceptStates = parity === 'even' ? ['q0'] : ['q1'];
                 
+                // Initialize all transitions
+                transitions['q0'] = {};
+                transitions['q1'] = {};
+                
                 alphabet.forEach(symbol => {
                     if (symbol === targetChar) {
-                        transitions['q0'] = transitions['q0'] || {};
                         transitions['q0'][symbol] = 'q1';
-                        
-                        transitions['q1'] = transitions['q1'] || {};
                         transitions['q1'][symbol] = 'q0';
                     } else {
-                        transitions['q0'] = transitions['q0'] || {};
                         transitions['q0'][symbol] = 'q0';
-                        
-                        transitions['q1'] = transitions['q1'] || {};
                         transitions['q1'][symbol] = 'q1';
                     }
                 });
@@ -589,8 +633,9 @@
             // Default: accept all strings
             states = ['q0'];
             acceptStates = ['q0'];
+            transitions['q0'] = {};
+            
             alphabet.forEach(symbol => {
-                transitions['q0'] = transitions['q0'] || {};
                 transitions['q0'][symbol] = 'q0';
             });
             
@@ -620,11 +665,6 @@
                 startState: generated.startState,
                 acceptStates: generated.acceptStates
             };
-
-            // Update the UI fields
-            document.getElementById('states').value = generated.states.join(', ');
-            document.getElementById('startState').value = generated.startState;
-            document.getElementById('acceptStates').value = generated.acceptStates.join(', ');
 
             return dfa;
         }
@@ -695,27 +735,51 @@
                         // Draw curved line
                         const midX = (from.x + to.x) / 2;
                         const midY = (from.y + to.y) / 2;
+                        
+                        // Calculate curve control point
                         const angle = Math.atan2(to.y - from.y, to.x - from.x);
-                        const curveOffset = 30;
+                        // Increase curve slightly for better separation
+                        const curveOffset = 40; 
                         const ctrlX = midX + curveOffset * Math.cos(angle + Math.PI / 2);
                         const ctrlY = midY + curveOffset * Math.sin(angle + Math.PI / 2);
 
                         ctx.beginPath();
                         ctx.moveTo(from.x, from.y);
+                        // Connect to center but we'll cover it with state circle
                         ctx.quadraticCurveTo(ctrlX, ctrlY, to.x, to.y);
                         ctx.stroke();
 
-                        // Arrow
-                        const t = 0.85;
-                        const arrowX = (1-t)*(1-t)*from.x + 2*(1-t)*t*ctrlX + t*t*to.x;
-                        const arrowY = (1-t)*(1-t)*from.y + 2*(1-t)*t*ctrlY + t*t*to.y;
-                        const dx = 2*(1-t)*(ctrlX-from.x) + 2*t*(to.x-ctrlX);
-                        const dy = 2*(1-t)*(ctrlY-from.y) + 2*t*(to.y-ctrlY);
-                        const arrowAngle = Math.atan2(dy, dx);
-                        drawArrow(ctx, arrowX, arrowY, arrowAngle);
+                        // Arrow Calculation - Position exactly at state boundary
+                        const stateRadius = 40;
+                        // Calculate angle from control point to destination center
+                        // This gives us the tangent of the curve as it approaches the destination
+                        const approachAngle = Math.atan2(to.y - ctrlY, to.x - ctrlX);
+                        
+                        // Back off from center by radius + small padding for the arrowhead tip
+                        const arrowX = to.x - (stateRadius + 3) * Math.cos(approachAngle);
+                        const arrowY = to.y - (stateRadius + 3) * Math.sin(approachAngle);
+                        
+                        drawArrow(ctx, arrowX, arrowY, approachAngle);
 
-                        // Label
-                        ctx.fillText(symbol, ctrlX, ctrlY);
+                        // Label - Place at the peak of the curve (t=0.5)
+                        // Formula for Quadratic Bezier at t=0.5 is (P0 + 2P1 + P2) / 4
+                        const labelX = (from.x + 2 * ctrlX + to.x) / 4;
+                        const labelY = (from.y + 2 * ctrlY + to.y) / 4;
+                        
+                        // Add a small background for text readability
+                        const textMetrics = ctx.measureText(symbol);
+                        const textPadding = 4;
+                        ctx.save();
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.fillRect(
+                            labelX - textMetrics.width/2 - textPadding, 
+                            labelY - 8 - textPadding, 
+                            textMetrics.width + textPadding*2, 
+                            16 + textPadding*2
+                        );
+                        ctx.restore();
+                        
+                        ctx.fillText(symbol, labelX, labelY);
                     }
                 }
             }
@@ -840,10 +904,7 @@
         }
 
         function clearAll() {
-            document.getElementById('states').value = '';
             document.getElementById('alphabet').value = '';
-            document.getElementById('startState').value = '';
-            document.getElementById('acceptStates').value = '';
             document.getElementById('problemDescription').value = '';
             document.getElementById('testString').value = '';
             
