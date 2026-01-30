@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventHive | Use Case Block Diagram</title>
+    <meta name="description" content="A detailed and premium block diagram of the EventHive system use cases.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-dark: #6d28d9;
+            --accent: #10b981;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-light: #f1f5f9;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(15, 23, 42, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 40%);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 600;
+            background: linear-gradient(to right, #a78bfa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        p.subtitle {
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .diagram-container {
+            position: relative;
+            width: 100%;
+            max-width: 1400px;
+            display: grid;
+            grid-template-columns: 200px 1fr 200px;
+            gap: 2rem;
+            align-items: stretch;
+            min-height: 800px;
+        }
+
+        .actors-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            gap: 2rem;
+        }
+
+        .actor-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .actor-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+        }
+
+        .actor-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .actor-name {
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .system-boundary {
+            background: var(--glass);
+            border: 2px solid var(--border);
+            border-radius: 2rem;
+            position: relative;
+            padding: 3rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: center;
+            gap: 1.5rem;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+            z-index: 5;
+        }
+
+        .system-title {
+            position: absolute;
+            top: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-dark);
+            padding: 0.5rem 2rem;
+            border: 2px solid var(--primary);
+            border-radius: 2rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .use-case {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            border-radius: 3rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-width: 150px;
+            max-width: 200px;
+            z-index: 10;
+        }
+
+        .use-case:hover {
+            background: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .use-case.shared {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .use-case.shared:hover {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* SVG Connections */
+        #connections-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .connection-line {
+            fill: none;
+            stroke: rgba(148, 163, 184, 0.2);
+            stroke-width: 1;
+            transition: all 0.3s ease;
+        }
+
+        .connection-line.active {
+            stroke: var(--primary);
+            stroke-width: 2;
+            opacity: 1;
+            filter: drop-shadow(0 0 5px var(--primary));
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modal / Tooltip style */
+        .info-panel {
+            margin-top: 3rem;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            max-width: 800px;
+            width: 100%;
+            border: 1px solid var(--border);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .info-panel h2 {
+            margin-bottom: 1rem;
+            color: var(--accent);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .legend {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>EventHive Ecosystem</h1>
+        <p class="subtitle">System Architecture & Use Case Diagram</p>
+    </header>
+
+    <div class="diagram-container" id="diagram">
+        <svg id="connections-svg"></svg>
+
+        <!-- Left Actors -->
+        <div class="actors-column">
+            <div class="actor-card" id="actor-admin">
+                <span class="actor-icon">🛡️</span>
+                <span class="actor-name">Admin</span>
+            </div>
+            <div class="actor-card" id="actor-client">
+                <span class="actor-icon">👤</span>
+                <span class="actor-name">Client</span>
+            </div>
+            <div class="actor-card" id="actor-sponsor">
+                <span class="actor-icon">💰</span>
+                <span class="actor-name">Sponsor</span>
+            </div>
+        </div>
+
+        <!-- System Boundary -->
+        <div class="system-boundary">
+            <div class="system-title">EventHive System</div>
+            
+            <!-- Use Cases -->
+            <div class="use-case" id="uc-report">Report Generation</div>
+            <div class="use-case" id="uc-admin-mgmt">Admin User Management</div>
+            <div class="use-case shared" id="uc-auth">Log in & Registration</div>
+            <div class="use-case" id="uc-event-mgmt">Update & Manage Event</div>
+            <div class="use-case" id="uc-vendor-app">Vendor Approval</div>
+            
+            <div class="use-case" id="uc-sched">Event Scheduling</div>
+            <div class="use-case" id="uc-close">Event Closure</div>
+            <div class="use-case" id="uc-docs">Document Upload</div>
+            <div class="use-case" id="uc-team">Team Member Management</div>
+            
+            <div class="use-case shared" id="uc-notify">Notification System</div>
+            <div class="use-case" id="uc-tasks">Task Assignment</div>
+            <div class="use-case" id="uc-create">Create Event</div>
+            <div class="use-case" id="uc-budget">Budget Planning</div>
+            
+            <div class="use-case" id="uc-attendance">Attendance Management</div>
+            <div class="use-case shared" id="uc-logout">System Logout</div>
+            <div class="use-case" id="uc-sponsor-mgmt">Sponsor Management</div>
+            <div class="use-case" id="uc-sponsor-reg">Sponsor Registration</div>
+            
+            <div class="use-case" id="uc-vendor-reg">Vendor Registration</div>
+            <div class="use-case" id="uc-task-update">Task Update</div>
+            <div class="use-case" id="uc-feedback">Feedback Collection</div>
+            <div class="use-case" id="uc-attendee-reg">Attendee Registration</div>
+        </div>
+
+        <!-- Right Actors -->
+        <div class="actors-column">
+            <div class="actor-card" id="actor-vendor">
+                <span class="actor-icon">🏪</span>
+                <span class="actor-name">Vendor</span>
+            </div>
+            <div class="actor-card" id="actor-employees">
+                <span class="actor-icon">👷</span>
+                <span class="actor-name">Employees</span>
+            </div>
+            <div class="actor-card" id="actor-attendee">
+                <span class="actor-icon">🎟️</span>
+                <span class="actor-name">Attendee</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-panel">
+        <h2>Interactive Analysis</h2>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--primary);"></div>
+                <span>Standard Use Case</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: var(--accent);"></div>
+                <span>Shared/Core Service</span>
+            </div>
+        </div>
+        <p id="details-text">Hover over an Actor or Use Case to visualize the relationships and data flow within the EventHive platform.</p>
+    </div>
+
+    <script>
+        const connections = [
+            // Admin
+            ['actor-admin', 'uc-report'],
+            ['actor-admin', 'uc-admin-mgmt'],
+            ['actor-admin', 'uc-auth'],
+            ['actor-admin', 'uc-event-mgmt'],
+            ['actor-admin', 'uc-vendor-app'],
+
+            // Client
+            ['actor-client', 'uc-sched'],
+            ['actor-client', 'uc-close'],
+            ['actor-client', 'uc-team'],
+            ['actor-client', 'uc-tasks'],
+            ['actor-client', 'uc-create'],
+            ['actor-client', 'uc-budget'],
+            ['actor-client', 'uc-event-mgmt'],
+            ['actor-client', 'uc-notify'],
+
+            // Sponsor
+            ['actor-sponsor', 'uc-budget'],
+            ['actor-sponsor', 'uc-sponsor-mgmt'],
+            ['actor-sponsor', 'uc-sponsor-reg'],
+            ['actor-sponsor', 'uc-auth'],
+            ['actor-sponsor', 'uc-logout'],
+
+            // Vendor
+            ['actor-vendor', 'uc-vendor-reg'],
+            ['actor-vendor', 'uc-vendor-app'],
+            ['actor-vendor', 'uc-auth'],
+            ['actor-vendor', 'uc-notify'],
+            ['actor-vendor', 'uc-tasks'],
+
+            // Employees
+            ['actor-employees', 'uc-notify'],
+            ['actor-employees', 'uc-attendance'],
+            ['actor-employees', 'uc-task-update'],
+            ['actor-employees', 'uc-logout'],
+
+            // Attendee
+            ['actor-attendee', 'uc-feedback'],
+            ['actor-attendee', 'uc-attendee-reg'],
+            ['actor-attendee', 'uc-auth'],
+            ['actor-attendee', 'uc-logout']
+        ];
+
+        const svg = document.getElementById('connections-svg');
+        const diagram = document.getElementById('diagram');
+
+        function drawConnections() {
+            svg.innerHTML = '';
+            const rect = diagram.getBoundingClientRect();
+
+            connections.forEach(([actorId, ucId]) => {
+                const actor = document.getElementById(actorId);
+                const uc = document.getElementById(ucId);
+                
+                if (!actor || !uc) return;
+
+                const actorRect = actor.getBoundingClientRect();
+                const ucRect = uc.getBoundingClientRect();
+
+                const x1 = (actorRect.left + actorRect.width / 2) - rect.left;
+                const y1 = (actorRect.top + actorRect.height / 2) - rect.top;
+                const x2 = (ucRect.left + ucRect.width / 2) - rect.left;
+                const y2 = (ucRect.top + ucRect.height / 2) - rect.top;
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                // Create a slightly curved path
+                const dx = x2 - x1;
+                const dy = y2 - y1;
+                const midX = (x1 + x2) / 2;
+                
+                // Quadratic bezier for smoother look
+                const d = `M ${x1} ${y1} Q ${x1 + dx*0.2} ${y1 + dy*0.8} ${x2} ${y2}`;
+                
+                line.setAttribute('d', d);
+                line.setAttribute('class', `connection-line actor-${actorId} uc-${ucId}`);
+                svg.appendChild(line);
+            });
+        }
+
+        // Initialize and handle resize
+        window.addEventListener('load', drawConnections);
+        window.addEventListener('resize', drawConnections);
+
+        // Interactivity
+        document.querySelectorAll('.actor-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const id = card.id;
+                document.querySelectorAll(`.actor-${id}`).forEach(line => {
+                    line.classList.add('active');
+                });
+                updateDetails(id);
+            });
+            card.addEventListener('mouseleave', () => {
+                document.querySelectorAll('.connection-line').forEach(line => {
+                    line.classList.remove('active');
+                });
+                resetDetails();
+            });
+        });
+
+        document.querySelectorAll('.use-case').forEach(uc => {
+            uc.addEventListener('mouseenter', () => {
+                const id = uc.id;
+                document.querySelectorAll(`.uc-${id}`).forEach(line => {
+                    line.classList.add('active');
+                });
+            });
+            uc.addEventListener('mouseleave', () => {
+                document.querySelectorAll('.connection-line').forEach(line => {
+                    line.classList.remove('active');
+                });
+            });
+        });
+
+        const details = {
+            'actor-admin': 'System Administrator responsible for platform health, vendor verification, and global event management.',
+            'actor-client': 'Primary event organizers who create, schedule, and manage the lifecycle of events and teams.',
+            'actor-sponsor': 'Financial partners who interact via registration and management portals to track their investments.',
+            'actor-vendor': 'Service providers (venues, catering, etc.) who register to offer their services and track assigned tasks.',
+            'actor-employees': 'Staff members assigned to events for operational tasks, attendance tracking, and reporting.',
+            'actor-attendee': 'The end-users who register for events and provide feedback on their experience.'
+        };
+
+        function updateDetails(id) {
+            document.getElementById('details-text').innerText = details[id] || 'Explore the interaction.';
+        }
+
+        function resetDetails() {
+            document.getElementById('details-text').innerText = 'Hover over an Actor or Use Case to visualize the relationships and data flow within the EventHive platform.';
+        }
+
+    </script>
+</body>
+</html>
