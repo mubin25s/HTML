@@ -307,6 +307,7 @@
             
             <div class="use-case" id="uc-vendor-reg">Vendor Registration</div>
             <div class="use-case" id="uc-task-update">Task Update</div>
+            <div class="use-case" id="uc-service-req">Vendor Service Request</div>
             <div class="use-case" id="uc-feedback">Feedback Collection</div>
             <div class="use-case" id="uc-attendee-reg">Attendee Registration</div>
         </div>
@@ -351,6 +352,7 @@
             ['actor-admin', 'uc-auth'],
             ['actor-admin', 'uc-event-mgmt'],
             ['actor-admin', 'uc-vendor-app'],
+            ['actor-admin', 'uc-docs'],
 
             // Client
             ['actor-client', 'uc-sched'],
@@ -361,6 +363,8 @@
             ['actor-client', 'uc-budget'],
             ['actor-client', 'uc-event-mgmt'],
             ['actor-client', 'uc-notify'],
+            ['actor-client', 'uc-service-req'],
+            ['actor-client', 'uc-docs'],
 
             // Sponsor
             ['actor-sponsor', 'uc-budget'],
@@ -375,6 +379,7 @@
             ['actor-vendor', 'uc-auth'],
             ['actor-vendor', 'uc-notify'],
             ['actor-vendor', 'uc-tasks'],
+            ['actor-vendor', 'uc-logout'],
 
             // Employees
             ['actor-employees', 'uc-notify'],
