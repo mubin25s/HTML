@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EventHive Functional Flow - Simple Version</title>
+    <style>
+        /* Minimal styling to match the visual structure of the diagram */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .diagram-wrapper {
+            display: flex;
+            gap: 60px;
+            position: relative;
+        }
+
+        /* Actors Column */
+        .actors {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+        }
+
+        .actor {
+            border: 2px solid #000;
+            border-radius: 25px;
+            padding: 10px 25px;
+            text-align: center;
+            width: 100px;
+            font-size: 14px;
+            background: #fff;
+        }
+
+        /* Functional Blocks Area */
+        .system-content {
+            display: grid;
+            grid-template-columns: 320px 320px 220px;
+            gap: 30px;
+        }
+
+        .block {
+            border: 1px solid #000;
+            padding: 15px;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .block-header {
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .task-node {
+            border: 1px solid #000;
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Connections Placeholder (Visual indication only as requested "simple") */
+        .connector-line {
+            height: 2px;
+            background-color: #333;
+            margin: 10px 0;
+        }
+
+        /* Specific Layout matching the picture */
+        .auth-box {
+            grid-column: 3;
+            grid-row: 2 / 5;
+            align-self: center;
+        }
+
+        .section-title {
+            margin-bottom: 30px;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 class="section-title">EventHive System Logic Flow</h2>
+
+    <div class="diagram-wrapper">
+        
+        <!-- Left Column: Actors -->
+        <div class="actors">
+            <div class="actor">Everyone</div>
+            <div class="actor">Admin</div>
+            <div class="actor">Client</div>
+            <div class="actor">Vendor</div>
+            <div class="actor">Attendee</div>
+            <div class="actor">Sponsor</div>
+            <div class="actor">Sponsor</div>
+            <div class="actor">Sponsor</div>
+        </div>
+
+        <!-- Main Logic Blocks -->
+        <div class="system-content">
+            
+            <!-- Block 1 -->
+            <div class="block">
+                <div class="block-header">(1) ADMIN AND TASK MANAGEMENT</div>
+                <div class="task-node">Manage Requests</div>
+                <div style="text-align:center;">↓</div>
+                <div class="task-node">Task Creation</div>
+                <div style="text-align:center;">↓</div>
+                <div class="task-node">Task Manager</div>
+            </div>
+
+            <!-- Block 3 -->
+            <div class="block">
+                <div class="block-header">(3) REPORT FUNCTION</div>
+                <div class="task-node">Trigger Reports</div>
+                <div style="text-align:center;">↓</div>
+                <div class="task-node">Review Data</div>
+                <div style="text-align:center;">↓</div>
+                <div class="task-node">Report Generation</div>
+            </div>
+
+            <!-- Block 4: Authentication on the right -->
+            <div class="block auth-box">
+                <div class="block-header">(4) AUTHENTICATION</div>
+                <div class="task-node">System Login</div>
+                <div style="text-align:center;">↓</div>
+                <div class="task-node">Authentication Access Control</div>
+            </div>
+
+            <!-- Block 2 -->
+            <div class="block">
+                <div class="block-header">(2) EVENT MANAGEMENT</div>
+                <div class="task-node">Manage Events</div>
+                <div style="text-align:center;">↓</div>
+                <div class="task-node">Create Event</div>
+                <div style="text-align:center;">↓</div>
+                <div class="task-node">Event Scheduling</div>
+                <div style="text-align:center;">↓</div>
+                <div class="task-node">Event Overview</div>
+            </div>
+
+            <!-- Block 6 -->
+            <div class="block">
+                <div class="block-header">(6) ATTENDEE FUNCTION</div>
+                <div class="task-node">Attendee Updates</div>
+                <div style="text-align:center;">↓</div>
+                <div class="task-node">Feedback Collection</div>
+            </div>
+
+            <!-- Block 5 -->
+            <div class="block" style="grid-column: 1;">
+                <div class="block-header">(5) VENDOR FUNCTION</div>
+                <div class="task-node">Vendor Registration</div>
+                <div style="text-align:center;">↓</div>
+                <div class="task-node">Vendor Listing</div>
+                <div style="text-align:center;">↓</div>
+                <div class="task-node">Vendor Management</div>
+            </div>
+
+            <!-- Block 7 -->
+            <div class="block" style="grid-column: 2;">
+                <div class="block-header">(7) SPONSOR FUNCTION</div>
+                <div class="task-node">Sponsor Registration</div>
+                <div style="text-align:center;">↓</div>
+                <div class="task-node">Budget Planning</div>
+            </div>
+
+        </div>
+    </div>
+
+    <div style="margin-top: 50px; font-size: 12px; color: #666;">
+        * This is a simplified static layout for structural reference. Arrows indicate sequence within modules.
+    </div>
+
+</body>
+</html>
