@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Design Patterns</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e2a;
+    --border: #252a38;
+    --blue: #4a9eed;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+    --pink: #ec4899;
+    --cyan: #06b6d4;
+    --lime: #84cc16;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --code-bg: #0a0c10;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(74,158,237,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74,158,237,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 60px 20px 40px;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(74,158,237,0.1);
+    border: 1px solid rgba(74,158,237,0.3);
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  h1 {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #e2e8f0 0%, #4a9eed 50%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeDown 0.6s 0.1s ease both;
+    opacity: 0;
+    line-height: 1.1;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-top: 12px;
+    animation: fadeDown 0.6s 0.2s ease both;
+    opacity: 0;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 30px 20px 0;
+    position: relative;
+    z-index: 1;
+    animation: fadeDown 0.6s 0.3s ease both;
+    opacity: 0;
+  }
+
+  .tab {
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    letter-spacing: 0.3px;
+  }
+
+  .tab:hover { border-color: var(--blue); color: var(--text); transform: translateY(-2px); }
+
+  .tab.active {
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+
+  .tab[data-tab="factory"].active { background: linear-gradient(135deg, #1e3a5f, #2563eb); border-color: #4a9eed; }
+  .tab[data-tab="singleton"].active { background: linear-gradient(135deg, #2d1b69, #6d28d9); border-color: #8b5cf6; }
+  .tab[data-tab="prototype"].active { background: linear-gradient(135deg, #1a4d2e, #15803d); border-color: #22c55e; }
+  .tab[data-tab="codesmell"].active { background: linear-gradient(135deg, #5c3d1a, #b45309); border-color: #f59e0b; }
+  .tab[data-tab="exception"].active { background: linear-gradient(135deg, #5c1a1a, #b91c1c); border-color: #ef4444; }
+
+  .content {
+    max-width: 980px;
+    margin: 30px auto;
+    padding: 0 20px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .panel { display: none; animation: fadeUp 0.4s ease both; }
+  .panel.active { display: block; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .section-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .icon-factory { background: rgba(74,158,237,0.15); border: 1px solid rgba(74,158,237,0.3); }
+  .icon-singleton { background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); }
+  .icon-prototype { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); }
+  .icon-codesmell { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); }
+  .icon-exception { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); }
+
+  .section-header h2 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
+  .section-header p { color: var(--muted); font-size: 0.9rem; margin-top: 2px; }
+
+  .col-blue { color: var(--blue); }
+  .col-purple { color: var(--purple); }
+  .col-green { color: var(--green); }
+  .col-amber { color: var(--amber); }
+  .col-red { color: var(--red); }
+
+  /* Info cards */
+  .info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .info-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    transition: transform 0.2s;
+  }
+  .info-card:hover { transform: translateY(-3px); }
+
+  .info-card-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .info-card-value { font-size: 1rem; font-weight: 600; color: var(--text); }
+
+  /* Code block */
+  .code-wrap {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-dots { display: flex; gap: 7px; }
+  .code-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+
+  .code-filename {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .copy-btn {
+    background: rgba(74,158,237,0.1);
+    border: 1px solid rgba(74,158,237,0.2);
+    color: var(--blue);
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { background: rgba(74,158,237,0.2); }
+  .copy-btn.copied { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); color: var(--green); }
+
+  pre {
+    padding: 24px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    line-height: 1.75;
+  }
+
+  /* Syntax colors */
+  .kw { color: #c792ea; font-weight: 600; }   /* keyword */
+  .cls { color: #ffcb6b; }                      /* class name */
+  .fn { color: #82aaff; }                       /* function/method */
+  .str { color: #c3e88d; }                      /* string */
+  .num { color: #f78c6c; }                      /* number */
+  .cmt { color: #546e7a; font-style: italic; }  /* comment */
+  .ann { color: #f07178; }                      /* annotation */
+  .iface { color: #89ddff; }                    /* interface keyword */
+  .op { color: #89ddff; }                       /* operators */
+  .var { color: #eeffff; }                      /* variables */
+
+  /* Output terminal */
+  .terminal {
+    background: #060810;
+    border: 1px solid #1a2035;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .terminal-header {
+    background: #0d1117;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #1a2035;
+  }
+  .terminal-title { font-size: 12px; color: var(--muted); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+  .terminal-body { padding: 20px 24px; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.9; }
+  .t-prompt { color: #546e7a; }
+  .t-green { color: #22c55e; }
+  .t-red { color: #ef4444; }
+  .t-amber { color: #f59e0b; }
+  .t-cyan { color: #06b6d4; }
+  .t-purple { color: #a78bfa; }
+  .t-white { color: #e2e8f0; }
+
+  /* Compare panels */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 640px) {
+    .compare-grid { grid-template-columns: 1fr; }
+  }
+
+  .compare-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .label-bad { color: var(--red); }
+  .label-good { color: var(--green); }
+
+  /* Tip box */
+  .tip-box {
+    display: flex;
+    gap: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #94a3b8;
+  }
+  .tip-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scrollbar */
+  pre::-webkit-scrollbar { height: 6px; }
+  pre::-webkit-scrollbar-track { background: transparent; }
+  pre::-webkit-scrollbar-thumb { background: #252a38; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">☕ Java Reference Guide</div>
+  <h1>Design Patterns &amp;<br>Best Practices</h1>
+  <p class="subtitle">Factory · Singleton · Prototype · Code Smell &amp; Refactoring · Exception Handling</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-tab="factory">🏭 Factory</button>
+  <button class="tab" data-tab="singleton">🔒 Singleton</button>
+  <button class="tab" data-tab="prototype">🧬 Prototype</button>
+  <button class="tab" data-tab="codesmell">🤢 Code Smell</button>
+  <button class="tab" data-tab="exception">⚠️ Exceptions</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== FACTORY ===== -->
+  <div class="panel active" id="panel-factory">
+    <div class="section-header">
+      <div class="section-icon icon-factory">🏭</div>
+      <div>
+        <h2 class="col-blue">Factory Pattern</h2>
+        <p>Create objects without exposing instantiation logic to the caller</p>
+      </div>
+    </div>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="info-card-label col-blue">Intent</div>
+        <div class="info-card-value">Delegate object creation to a factory method</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label col-blue">When to Use</div>
+        <div class="info-card-value">When the exact type isn't known until runtime</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label col-blue">Benefit</div>
+        <div class="info-card-value">Caller doesn't need to know <code style="color:#4a9eed">new Dog()</code> or <code style="color:#4a9eed">new Cat()</code></div>
+      </div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="code-dots">
+          <div class="code-dot dot-red"></div>
+          <div class="code-dot dot-yellow"></div>
+          <div class="code-dot dot-green"></div>
+        </div>
+        <span class="code-filename">AnimalFactory.java</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><span class="cmt">// ── Product interface ────────────────────────────────────</span>
+<span class="iface">interface</span> <span class="cls">Animal</span> <span class="op">{</span>
+    <span class="kw">void</span> <span class="fn">speak</span><span class="op">();</span>
+<span class="op">}</span>
+
+<span class="cmt">// ── Concrete products ─────────────────────────────────────</span>
+<span class="kw">class</span> <span class="cls">Dog</span> <span class="kw">implements</span> <span class="cls">Animal</span> <span class="op">{</span>
+    <span class="kw">public void</span> <span class="fn">speak</span><span class="op">() {</span>
+        <span class="cls">System</span><span class="op">.</span><span class="fn">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="str">"Woof! 🐶"</span><span class="op">);</span>
+    <span class="op">}</span>
+<span class="op">}</span>
+
+<span class="kw">class</span> <span class="cls">Cat</span> <span class="kw">implements</span> <span class="cls">Animal</span> <span class="op">{</span>
+    <span class="kw">public void</span> <span class="fn">speak</span><span class="op">() {</span>
+        <span class="cls">System</span><span class="op">.</span><span class="fn">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="str">"Meow! 🐱"</span><span class="op">);</span>
+    <span class="op">}</span>
+<span class="op">}</span>
+
+<span class="cmt">// ── Factory ───────────────────────────────────────────────</span>
+<span class="kw">class</span> <span class="cls">AnimalFactory</span> <span class="op">{</span>
+    <span class="kw">public static</span> <span class="cls">Animal</span> <span class="fn">create</span><span class="op">(</span><span class="cls">String</span> <span class="var">type</span><span class="op">) {</span>
+        <span class="kw">return switch</span> <span class="op">(</span><span class="var">type</span><span class="op">.</span><span class="fn">toLowerCase</span><span class="op">()) {</span>
+            <span class="kw">case</span> <span class="str">"dog"</span>  <span class="op">-&gt;</span> <span class="kw">new</span> <span class="cls">Dog</span><span class="op">();</span>
+            <span class="kw">case</span> <span class="str">"cat"</span>  <span class="op">-&gt;</span> <span class="kw">new</span> <span class="cls">Cat</span><span class="op">();</span>
+            <span class="kw">default</span>       <span class="op">-&gt;</span> <span class="kw">throw new</span> <span class="cls">IllegalArgumentException</span><span class="op">(</span>
+                                    <span class="str">"Unknown animal: "</span> <span class="op">+</span> <span class="var">type</span><span class="op">);</span>
+        <span class="op">};</span>
+    <span class="op">}</span>
+<span class="op">}</span>
+
+<span class="cmt">// ── Usage ─────────────────────────────────────────────────</span>
+<span class="kw">public class</span> <span class="cls">Main</span> <span class="op">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="op">(</span><span class="cls">String</span><span class="op">[]</span> <span class="var">args</span><span class="op">) {</span>
+        <span class="cls">Animal</span> <span class="var">a</span> <span class="op">=</span> <span class="cls">AnimalFactory</span><span class="op">.</span><span class="fn">create</span><span class="op">(</span><span class="str">"dog"</span><span class="op">);</span>
+        <span class="var">a</span><span class="op">.</span><span class="fn">speak</span><span class="op">();</span>    <span class="cmt">// Woof! 🐶</span>
+
+        <span class="cls">Animal</span> <span class="var">b</span> <span class="op">=</span> <span class="cls">AnimalFactory</span><span class="op">.</span><span class="fn">create</span><span class="op">(</span><span class="str">"cat"</span><span class="op">);</span>
+        <span class="var">b</span><span class="op">.</span><span class="fn">speak</span><span class="op">();</span>    <span class="cmt">// Meow! 🐱</span>
+    <span class="op">}</span>
+<span class="op">}</span></pre>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="code-dots">
+          <div class="code-dot dot-red"></div>
+          <div class="code-dot dot-yellow"></div>
+          <div class="code-dot dot-green"></div>
+        </div>
+        <span class="terminal-title">▶ Output</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="t-prompt">$ </span><span class="t-cyan">java</span><span class="t-white"> Main</span></div>
+        <div><span class="t-green">Woof! 🐶</span></div>
+        <div><span class="t-green">Meow! 🐱</span></div>
+      </div>
+    </div>
+
+    <div class="tip-box" style="border-left-color: var(--blue);">
+      <span class="tip-icon">💡</span>
+      <span><strong style="color:var(--blue)">Key Insight:</strong> The caller only knows about the <code style="color:#4a9eed">Animal</code> interface. Adding a new <code style="color:#4a9eed">Bird</code> class only requires updating the factory — not the calling code. This is the <strong>Open/Closed Principle</strong> in action.</span>
+    </div>
+  </div>
+
+  <!-- ===== SINGLETON ===== -->
+  <div class="panel" id="panel-singleton">
+    <div class="section-header">
+      <div class="section-icon icon-singleton">🔒</div>
+      <div>
+        <h2 class="col-purple">Singleton Pattern</h2>
+        <p>Ensure only one instance of a class exists — globally accessible</p>
+      </div>
+    </div>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="info-card-label col-purple">Intent</div>
+        <div class="info-card-value">One and only one instance, ever</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label col-purple">Use Cases</div>
+        <div class="info-card-value">DB connection, Config manager, Logger</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label col-purple">Thread Safety</div>
+        <div class="info-card-value">Double-checked locking + <code style="color:#8b5cf6">volatile</code></div>
+      </div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="code-dots">
+          <div class="code-dot dot-red"></div>
+          <div class="code-dot dot-yellow"></div>
+          <div class="code-dot dot-green"></div>
+        </div>
+        <span class="code-filename">DatabaseConnection.java</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><span class="kw">public class</span> <span class="cls">DatabaseConnection</span> <span class="op">{</span>
+
+    <span class="cmt">// 1. Volatile ensures visibility across threads</span>
+    <span class="kw">private static volatile</span> <span class="cls">DatabaseConnection</span> <span class="var">instance</span><span class="op">;</span>
+    <span class="kw">private</span> <span class="cls">String</span> <span class="var">url</span><span class="op">;</span>
+
+    <span class="cmt">// 2. Private constructor — prevents `new DatabaseConnection()`</span>
+    <span class="kw">private</span> <span class="fn">DatabaseConnection</span><span class="op">() {</span>
+        <span class="var">url</span> <span class="op">=</span> <span class="str">"jdbc:mysql://localhost:3306/mydb"</span><span class="op">;</span>
+        <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="str">"✅ DB Connection created."</span><span class="op">);</span>
+    <span class="op">}</span>
+
+    <span class="cmt">// 3. Thread-safe access (double-checked locking)</span>
+    <span class="kw">public static</span> <span class="cls">DatabaseConnection</span> <span class="fn">getInstance</span><span class="op">() {</span>
+        <span class="kw">if</span> <span class="op">(</span><span class="var">instance</span> <span class="op">==</span> <span class="kw">null</span><span class="op">) {</span>
+            <span class="kw">synchronized</span> <span class="op">(</span><span class="cls">DatabaseConnection</span><span class="op">.</span><span class="kw">class</span><span class="op">) {</span>
+                <span class="kw">if</span> <span class="op">(</span><span class="var">instance</span> <span class="op">==</span> <span class="kw">null</span><span class="op">) {</span>
+                    <span class="var">instance</span> <span class="op">=</span> <span class="kw">new</span> <span class="cls">DatabaseConnection</span><span class="op">();</span>
+                <span class="op">}</span>
+            <span class="op">}</span>
+        <span class="op">}</span>
+        <span class="kw">return</span> <span class="var">instance</span><span class="op">;</span>
+    <span class="op">}</span>
+
+    <span class="kw">public void</span> <span class="fn">query</span><span class="op">(</span><span class="cls">String</span> <span class="var">sql</span><span class="op">) {</span>
+        <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">printf</span><span class="op">(</span><span class="str">"🗄️  [%s]  %s%n"</span><span class="op">,</span> <span class="var">url</span><span class="op">,</span> <span class="var">sql</span><span class="op">);</span>
+    <span class="op">}</span>
+<span class="op">}</span>
+
+<span class="cmt">// ── Usage ─────────────────────────────────────────────────</span>
+<span class="kw">public class</span> <span class="cls">Main</span> <span class="op">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="op">(</span><span class="cls">String</span><span class="op">[]</span> <span class="var">args</span><span class="op">) {</span>
+        <span class="cls">DatabaseConnection</span> <span class="var">db1</span> <span class="op">=</span> <span class="cls">DatabaseConnection</span><span class="op">.</span><span class="fn">getInstance</span><span class="op">();</span>
+        <span class="cls">DatabaseConnection</span> <span class="var">db2</span> <span class="op">=</span> <span class="cls">DatabaseConnection</span><span class="op">.</span><span class="fn">getInstance</span><span class="op">();</span>
+
+        <span class="var">db1</span><span class="op">.</span><span class="fn">query</span><span class="op">(</span><span class="str">"SELECT * FROM users"</span><span class="op">);</span>
+
+        <span class="cmt">// Proves same instance:</span>
+        <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="var">db1</span> <span class="op">==</span> <span class="var">db2</span><span class="op">);</span>   <span class="cmt">// true ✅</span>
+    <span class="op">}</span>
+<span class="op">}</span></pre>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="code-dots">
+          <div class="code-dot dot-red"></div>
+          <div class="code-dot dot-yellow"></div>
+          <div class="code-dot dot-green"></div>
+        </div>
+        <span class="terminal-title">▶ Output</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="t-prompt">$ </span><span class="t-cyan">java</span><span class="t-white"> Main</span></div>
+        <div><span class="t-green">✅ DB Connection created.</span></div>
+        <div><span class="t-white">🗄️  [jdbc:mysql://localhost:3306/mydb]  SELECT * FROM users</span></div>
+        <div><span class="t-purple">true</span></div>
+      </div>
+    </div>
+
+    <div class="tip-box" style="border-left-color: var(--purple);">
+      <span class="tip-icon">⚠️</span>
+      <span><strong style="color:var(--purple)">Why volatile?</strong> Without <code style="color:#a78bfa">volatile</code>, another thread might see a partially constructed object due to CPU instruction reordering. <code style="color:#a78bfa">volatile</code> forces a full memory barrier and ensures the object is fully visible before use.</span>
+    </div>
+  </div>
+
+  <!-- ===== PROTOTYPE ===== -->
+  <div class="panel" id="panel-prototype">
+    <div class="section-header">
+      <div class="section-icon icon-prototype">🧬</div>
+      <div>
+        <h2 class="col-green">Prototype Pattern</h2>
+        <p>Clone an existing object instead of creating from scratch</p>
+      </div>
+    </div>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="info-card-label col-green">Intent</div>
+        <div class="info-card-value">Copy a configured object and customize it</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label col-green">When to Use</div>
+        <div class="info-card-value">Object creation is expensive or complex</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label col-green">Watch Out</div>
+        <div class="info-card-value">Deep copy vs shallow copy — collections need care</div>
+      </div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="code-dots">
+          <div class="code-dot dot-red"></div>
+          <div class="code-dot dot-yellow"></div>
+          <div class="code-dot dot-green"></div>
+        </div>
+        <span class="code-filename">UserProfile.java</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><span class="cmt">// ── Prototype interface ───────────────────────────────────</span>
+<span class="iface">interface</span> <span class="cls">Prototype</span> <span class="op">{</span>
+    <span class="cls">Prototype</span> <span class="fn">clone</span><span class="op">();</span>
+<span class="op">}</span>
+
+<span class="cmt">// ── Concrete prototype ────────────────────────────────────</span>
+<span class="kw">class</span> <span class="cls">UserProfile</span> <span class="kw">implements</span> <span class="cls">Prototype</span> <span class="op">{</span>
+    <span class="kw">private</span> <span class="cls">String</span>       <span class="var">name</span><span class="op">;</span>
+    <span class="kw">private</span> <span class="cls">String</span>       <span class="var">role</span><span class="op">;</span>
+    <span class="kw">private</span> <span class="cls">List</span><span class="op">&lt;</span><span class="cls">String</span><span class="op">&gt;</span> <span class="var">permissions</span><span class="op">;</span>
+
+    <span class="kw">public</span> <span class="fn">UserProfile</span><span class="op">(</span><span class="cls">String</span> <span class="var">name</span><span class="op">,</span> <span class="cls">String</span> <span class="var">role</span><span class="op">,</span>
+                       <span class="cls">List</span><span class="op">&lt;</span><span class="cls">String</span><span class="op">&gt;</span> <span class="var">permissions</span><span class="op">) {</span>
+        <span class="kw">this</span><span class="op">.</span><span class="var">name</span>        <span class="op">=</span> <span class="var">name</span><span class="op">;</span>
+        <span class="kw">this</span><span class="op">.</span><span class="var">role</span>        <span class="op">=</span> <span class="var">role</span><span class="op">;</span>
+        <span class="cmt">// Deep copy — so clones get independent lists</span>
+        <span class="kw">this</span><span class="op">.</span><span class="var">permissions</span> <span class="op">=</span> <span class="kw">new</span> <span class="cls">ArrayList</span><span class="op">&lt;&gt;(</span><span class="var">permissions</span><span class="op">);</span>
+    <span class="op">}</span>
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="cls">UserProfile</span> <span class="fn">clone</span><span class="op">() {</span>
+        <span class="kw">return new</span> <span class="cls">UserProfile</span><span class="op">(</span><span class="kw">this</span><span class="op">.</span><span class="var">name</span><span class="op">,</span>
+                                <span class="kw">this</span><span class="op">.</span><span class="var">role</span><span class="op">,</span>
+                                <span class="kw">this</span><span class="op">.</span><span class="var">permissions</span><span class="op">);</span>
+    <span class="op">}</span>
+
+    <span class="kw">public void</span> <span class="fn">setName</span><span class="op">(</span><span class="cls">String</span> <span class="var">name</span><span class="op">) {</span> <span class="kw">this</span><span class="op">.</span><span class="var">name</span> <span class="op">=</span> <span class="var">name</span><span class="op">; }</span>
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="cls">String</span> <span class="fn">toString</span><span class="op">() {</span>
+        <span class="kw">return</span> <span class="str">"UserProfile{name='"</span> <span class="op">+</span> <span class="var">name</span>
+             <span class="op">+</span> <span class="str">"', role='"</span> <span class="op">+</span> <span class="var">role</span>
+             <span class="op">+</span> <span class="str">"', perms="</span> <span class="op">+</span> <span class="var">permissions</span> <span class="op">+</span> <span class="str">"}"</span><span class="op">;</span>
+    <span class="op">}</span>
+<span class="op">}</span>
+
+<span class="cmt">// ── Usage ─────────────────────────────────────────────────</span>
+<span class="kw">public class</span> <span class="cls">Main</span> <span class="op">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="op">(</span><span class="cls">String</span><span class="op">[]</span> <span class="var">args</span><span class="op">) {</span>
+        <span class="cls">UserProfile</span> <span class="var">template</span> <span class="op">=</span> <span class="kw">new</span> <span class="cls">UserProfile</span><span class="op">(</span>
+            <span class="str">"Template"</span><span class="op">,</span> <span class="str">"ADMIN"</span><span class="op">,</span>
+            <span class="cls">List</span><span class="op">.</span><span class="fn">of</span><span class="op">(</span><span class="str">"READ"</span><span class="op">,</span> <span class="str">"WRITE"</span><span class="op">,</span> <span class="str">"DELETE"</span><span class="op">));</span>
+
+        <span class="cmt">// Clone and customize — no expensive re-setup</span>
+        <span class="cls">UserProfile</span> <span class="var">alice</span> <span class="op">=</span> <span class="var">template</span><span class="op">.</span><span class="fn">clone</span><span class="op">();</span>
+        <span class="var">alice</span><span class="op">.</span><span class="fn">setName</span><span class="op">(</span><span class="str">"Alice"</span><span class="op">);</span>
+
+        <span class="cls">UserProfile</span> <span class="var">bob</span> <span class="op">=</span> <span class="var">template</span><span class="op">.</span><span class="fn">clone</span><span class="op">();</span>
+        <span class="var">bob</span><span class="op">.</span><span class="fn">setName</span><span class="op">(</span><span class="str">"Bob"</span><span class="op">);</span>
+
+        <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="var">alice</span><span class="op">);</span>
+        <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="var">bob</span><span class="op">);</span>
+    <span class="op">}</span>
+<span class="op">}</span></pre>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="code-dots">
+          <div class="code-dot dot-red"></div>
+          <div class="code-dot dot-yellow"></div>
+          <div class="code-dot dot-green"></div>
+        </div>
+        <span class="terminal-title">▶ Output</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="t-prompt">$ </span><span class="t-cyan">java</span><span class="t-white"> Main</span></div>
+        <div><span class="t-green">UserProfile{name='Alice', role='ADMIN', perms=[READ, WRITE, DELETE]}</span></div>
+        <div><span class="t-green">UserProfile{name='Bob',  role='ADMIN', perms=[READ, WRITE, DELETE]}</span></div>
+      </div>
+    </div>
+
+    <div class="tip-box" style="border-left-color: var(--green);">
+      <span class="tip-icon">💡</span>
+      <span><strong style="color:var(--green)">Deep vs Shallow Copy:</strong> Always use <code style="color:#86efac">new ArrayList&lt;&gt;(original)</code> when cloning lists. A shallow copy would share the same list reference — modifying <code>alice.permissions</code> would also modify <code>bob.permissions</code>!</span>
+    </div>
+  </div>
+
+  <!-- ===== CODE SMELL ===== -->
+  <div class="panel" id="panel-codesmell">
+    <div class="section-header">
+      <div class="section-icon icon-codesmell">🤢</div>
+      <div>
+        <h2 class="col-amber">Code Smell &amp; Refactoring</h2>
+        <p>Identify bad patterns and transform them into clean, maintainable code</p>
+      </div>
+    </div>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="info-card-label col-amber">Smell #1</div>
+        <div class="info-card-value">Magic numbers (1, 2, 3.14159)</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label col-amber">Smell #2</div>
+        <div class="info-card-value">Meaningless names (p, x, t, O)</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label col-amber">Smell #3</div>
+        <div class="info-card-value">God method — does everything</div>
+      </div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="code-wrap" style="margin-bottom:0">
+        <div class="code-header">
+          <div class="compare-label label-bad">❌ Before — Smelly Code</div>
+        </div>
+        <pre style="font-size:12.5px"><span class="cmt">// SMELLS FOUND:</span>
+<span class="cmt">// - Meaningless class & method names</span>
+<span class="cmt">// - Magic numbers (1, 2, 3)</span>
+<span class="cmt">// - Hardcoded PI (use Math.PI!)</span>
+<span class="cmt">// - One method doing everything</span>
+<span class="cmt">// - Hard to extend with new shapes</span>
+
+<span class="kw">public class</span> <span class="cls">O</span> <span class="op">{</span>   <span class="cmt">// 😱 what is O?</span>
+    <span class="kw">public void</span> <span class="fn">p</span><span class="op">(</span><span class="kw">int</span> <span class="var">x</span><span class="op">,</span>
+                   <span class="kw">int</span> <span class="var">y</span><span class="op">,</span>
+                   <span class="kw">int</span> <span class="var">t</span><span class="op">) {</span>
+        <span class="kw">if</span> <span class="op">(</span><span class="var">t</span> <span class="op">==</span> <span class="num">1</span><span class="op">) {</span>   <span class="cmt">// what is 1?</span>
+            <span class="kw">double</span> <span class="var">r</span> <span class="op">= </span><span class="var">x</span> <span class="op">*</span> <span class="num">3.14159</span> <span class="op">*</span> <span class="num">3.14159</span><span class="op">;</span>
+            <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="str">"Area: "</span> <span class="op">+</span> <span class="var">r</span><span class="op">);</span>
+        <span class="op">}</span> <span class="kw">else if</span> <span class="op">(</span><span class="var">t</span> <span class="op">==</span> <span class="num">2</span><span class="op">) {</span>
+            <span class="kw">double</span> <span class="var">r</span> <span class="op">=</span> <span class="var">x</span> <span class="op">*</span> <span class="var">y</span><span class="op">;</span>
+            <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="str">"Area: "</span> <span class="op">+</span> <span class="var">r</span><span class="op">);</span>
+        <span class="op">}</span> <span class="kw">else if</span> <span class="op">(</span><span class="var">t</span> <span class="op">==</span> <span class="num">3</span><span class="op">) {</span>
+            <span class="kw">double</span> <span class="var">r</span> <span class="op">=</span> <span class="num">0.5</span> <span class="op">*</span> <span class="var">x</span> <span class="op">*</span> <span class="var">y</span><span class="op">;</span>
+            <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="str">"Area: "</span> <span class="op">+</span> <span class="var">r</span><span class="op">);</span>
+        <span class="op">}</span>
+    <span class="op">}</span>
+<span class="op">}</span></pre>
+      </div>
+
+      <div class="code-wrap" style="margin-bottom:0">
+        <div class="code-header">
+          <div class="compare-label label-good">✅ After — Clean Code</div>
+        </div>
+        <pre style="font-size:12.5px"><span class="cmt">// FIXED:</span>
+<span class="cmt">// + Interface for extensibility (OCP)</span>
+<span class="cmt">// + Descriptive names</span>
+<span class="cmt">// + Each class owns one responsibility</span>
+<span class="cmt">// + No magic numbers</span>
+<span class="cmt">// + Easy to add new shapes</span>
+
+<span class="iface">interface</span> <span class="cls">Shape</span> <span class="op">{</span>
+    <span class="kw">double</span> <span class="fn">calculateArea</span><span class="op">();</span>
+<span class="op">}</span>
+
+<span class="kw">class</span> <span class="cls">Circle</span> <span class="kw">implements</span> <span class="cls">Shape</span> <span class="op">{</span>
+    <span class="kw">private static final double</span> <span class="var">PI</span> <span class="op">=</span> <span class="cls">Math</span><span class="op">.</span><span class="var">PI</span><span class="op">;</span>
+    <span class="kw">private final double</span> <span class="var">radius</span><span class="op">;</span>
+    <span class="kw">public</span> <span class="fn">Circle</span><span class="op">(</span><span class="kw">double</span> <span class="var">r</span><span class="op">) {</span> <span class="var">radius</span> <span class="op">=</span> <span class="var">r</span><span class="op">; }</span>
+    <span class="ann">@Override</span>
+    <span class="kw">public double</span> <span class="fn">calculateArea</span><span class="op">() {</span>
+        <span class="kw">return</span> <span class="var">PI</span> <span class="op">*</span> <span class="var">radius</span> <span class="op">*</span> <span class="var">radius</span><span class="op">;</span>
+    <span class="op">}</span>
+<span class="op">}</span>
+
+<span class="kw">class</span> <span class="cls">Rectangle</span> <span class="kw">implements</span> <span class="cls">Shape</span> <span class="op">{</span>
+    <span class="kw">private final double</span> <span class="var">width</span><span class="op">,</span> <span class="var">height</span><span class="op">;</span>
+    <span class="kw">public</span> <span class="fn">Rectangle</span><span class="op">(</span><span class="kw">double</span> <span class="var">w</span><span class="op">,</span> <span class="kw">double</span> <span class="var">h</span><span class="op">) {</span>
+        <span class="var">width</span><span class="op">=</span><span class="var">w</span><span class="op">;</span> <span class="var">height</span><span class="op">=</span><span class="var">h</span><span class="op">;</span>
+    <span class="op">}</span>
+    <span class="ann">@Override</span>
+    <span class="kw">public double</span> <span class="fn">calculateArea</span><span class="op">() {</span>
+        <span class="kw">return</span> <span class="var">width</span> <span class="op">*</span> <span class="var">height</span><span class="op">;</span>
+    <span class="op">}</span>
+<span class="op">}</span>
+
+<span class="kw">class</span> <span class="cls">Triangle</span> <span class="kw">implements</span> <span class="cls">Shape</span> <span class="op">{</span>
+    <span class="kw">private final double</span> <span class="var">base</span><span class="op">,</span> <span class="var">height</span><span class="op">;</span>
+    <span class="kw">public</span> <span class="fn">Triangle</span><span class="op">(</span><span class="kw">double</span> <span class="var">b</span><span class="op">,</span> <span class="kw">double</span> <span class="var">h</span><span class="op">) {</span>
+        <span class="var">base</span><span class="op">=</span><span class="var">b</span><span class="op">;</span> <span class="var">height</span><span class="op">=</span><span class="var">h</span><span class="op">;</span>
+    <span class="op">}</span>
+    <span class="ann">@Override</span>
+    <span class="kw">public double</span> <span class="fn">calculateArea</span><span class="op">() {</span>
+        <span class="kw">return</span> <span class="num">0.5</span> <span class="op">*</span> <span class="var">base</span> <span class="op">*</span> <span class="var">height</span><span class="op">;</span>
+    <span class="op">}</span>
+<span class="op">}</span></pre>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="code-dots">
+          <div class="code-dot dot-red"></div>
+          <div class="code-dot dot-yellow"></div>
+          <div class="code-dot dot-green"></div>
+        </div>
+        <span class="code-filename">Main.java — Clean usage</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><span class="kw">public class</span> <span class="cls">Main</span> <span class="op">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="op">(</span><span class="cls">String</span><span class="op">[]</span> <span class="var">args</span><span class="op">) {</span>
+        <span class="cls">List</span><span class="op">&lt;</span><span class="cls">Shape</span><span class="op">&gt;</span> <span class="var">shapes</span> <span class="op">=</span> <span class="cls">List</span><span class="op">.</span><span class="fn">of</span><span class="op">(</span>
+            <span class="kw">new</span> <span class="cls">Circle</span><span class="op">(</span><span class="num">5</span><span class="op">),</span>
+            <span class="kw">new</span> <span class="cls">Rectangle</span><span class="op">(</span><span class="num">4</span><span class="op">,</span> <span class="num">6</span><span class="op">),</span>
+            <span class="kw">new</span> <span class="cls">Triangle</span><span class="op">(</span><span class="num">3</span><span class="op">,</span> <span class="num">8</span><span class="op">)</span>
+        <span class="op">);</span>
+
+        <span class="var">shapes</span><span class="op">.</span><span class="fn">forEach</span><span class="op">(</span><span class="var">s</span> <span class="op">-&gt;</span>
+            <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">printf</span><span class="op">(</span><span class="str">"%s area: %.2f%n"</span><span class="op">,</span>
+                <span class="var">s</span><span class="op">.</span><span class="fn">getClass</span><span class="op">().</span><span class="fn">getSimpleName</span><span class="op">(),</span>
+                <span class="var">s</span><span class="op">.</span><span class="fn">calculateArea</span><span class="op">())</span>
+        <span class="op">);</span>
+    <span class="op">}</span>
+<span class="op">}</span></pre>
+    </div>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="code-dots">
+          <div class="code-dot dot-red"></div>
+          <div class="code-dot dot-yellow"></div>
+          <div class="code-dot dot-green"></div>
+        </div>
+        <span class="terminal-title">▶ Output</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="t-prompt">$ </span><span class="t-cyan">java</span><span class="t-white"> Main</span></div>
+        <div><span class="t-amber">Circle area: 78.54</span></div>
+        <div><span class="t-amber">Rectangle area: 24.00</span></div>
+        <div><span class="t-amber">Triangle area: 12.00</span></div>
+      </div>
+    </div>
+
+    <div class="tip-box" style="border-left-color: var(--amber);">
+      <span class="tip-icon">🔑</span>
+      <span><strong style="color:var(--amber)">SOLID Principles Applied:</strong> The refactored code follows <strong>S</strong>ingle Responsibility (each class manages one shape) and <strong>O</strong>pen/Closed (add new shapes by creating new classes, never editing existing ones).</span>
+    </div>
+  </div>
+
+  <!-- ===== EXCEPTION ===== -->
+  <div class="panel" id="panel-exception">
+    <div class="section-header">
+      <div class="section-icon icon-exception">⚠️</div>
+      <div>
+        <h2 class="col-red">Exception Handling</h2>
+        <p>Be specific, descriptive, and never swallow errors silently</p>
+      </div>
+    </div>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="info-card-label col-red">Rule #1</div>
+        <div class="info-card-value">Use specific exceptions, not generic <code style="color:#f87171">Exception</code></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label col-red">Rule #2</div>
+        <div class="info-card-value">Custom domain exceptions carry context data</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label col-red">Rule #3</div>
+        <div class="info-card-value">Never: <code style="color:#f87171">catch(e) {}</code> — that's a silent failure bug</div>
+      </div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <div class="code-dots">
+          <div class="code-dot dot-red"></div>
+          <div class="code-dot dot-yellow"></div>
+          <div class="code-dot dot-green"></div>
+        </div>
+        <span class="code-filename">BankAccount.java</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><span class="cmt">// ── Custom exception carries context ─────────────────────</span>
+<span class="kw">class</span> <span class="cls">InsufficientFundsException</span> <span class="kw">extends</span> <span class="cls">Exception</span> <span class="op">{</span>
+    <span class="kw">private final double</span> <span class="var">shortfall</span><span class="op">;</span>
+
+    <span class="kw">public</span> <span class="fn">InsufficientFundsException</span><span class="op">(</span><span class="kw">double</span> <span class="var">shortfall</span><span class="op">) {</span>
+        <span class="kw">super</span><span class="op">(</span><span class="cls">String</span><span class="op">.</span><span class="fn">format</span><span class="op">(</span><span class="str">"Insufficient funds. Short by: $%.2f"</span><span class="op">,</span>
+                             <span class="var">shortfall</span><span class="op">));</span>
+        <span class="kw">this</span><span class="op">.</span><span class="var">shortfall</span> <span class="op">=</span> <span class="var">shortfall</span><span class="op">;</span>
+    <span class="op">}</span>
+
+    <span class="kw">public double</span> <span class="fn">getShortfall</span><span class="op">() {</span> <span class="kw">return</span> <span class="var">shortfall</span><span class="op">; }</span>
+<span class="op">}</span>
+
+<span class="cmt">// ── Domain class ──────────────────────────────────────────</span>
+<span class="kw">class</span> <span class="cls">BankAccount</span> <span class="op">{</span>
+    <span class="kw">private</span> <span class="cls">String</span> <span class="var">owner</span><span class="op">;</span>
+    <span class="kw">private double</span> <span class="var">balance</span><span class="op">;</span>
+
+    <span class="kw">public</span> <span class="fn">BankAccount</span><span class="op">(</span><span class="cls">String</span> <span class="var">owner</span><span class="op">,</span> <span class="kw">double</span> <span class="var">initial</span><span class="op">) {</span>
+        <span class="kw">if</span> <span class="op">(</span><span class="var">initial</span> <span class="op">&lt;</span> <span class="num">0</span><span class="op">)</span>
+            <span class="kw">throw new</span> <span class="cls">IllegalArgumentException</span><span class="op">(</span>
+                <span class="str">"Initial balance cannot be negative."</span><span class="op">);</span>
+        <span class="kw">this</span><span class="op">.</span><span class="var">owner</span>   <span class="op">=</span> <span class="var">owner</span><span class="op">;</span>
+        <span class="kw">this</span><span class="op">.</span><span class="var">balance</span> <span class="op">=</span> <span class="var">initial</span><span class="op">;</span>
+    <span class="op">}</span>
+
+    <span class="kw">public void</span> <span class="fn">withdraw</span><span class="op">(</span><span class="kw">double</span> <span class="var">amount</span><span class="op">)</span>
+            <span class="kw">throws</span> <span class="cls">InsufficientFundsException</span> <span class="op">{</span>
+        <span class="kw">if</span> <span class="op">(</span><span class="var">amount</span> <span class="op">&lt;=</span> <span class="num">0</span><span class="op">)</span>
+            <span class="kw">throw new</span> <span class="cls">IllegalArgumentException</span><span class="op">(</span>
+                <span class="str">"Withdrawal amount must be positive."</span><span class="op">);</span>
+        <span class="kw">if</span> <span class="op">(</span><span class="var">amount</span> <span class="op">&gt;</span> <span class="var">balance</span><span class="op">)</span>
+            <span class="kw">throw new</span> <span class="cls">InsufficientFundsException</span><span class="op">(</span><span class="var">amount</span> <span class="op">-</span> <span class="var">balance</span><span class="op">);</span>
+        <span class="var">balance</span> <span class="op">-=</span> <span class="var">amount</span><span class="op">;</span>
+    <span class="op">}</span>
+
+    <span class="kw">public double</span> <span class="fn">getBalance</span><span class="op">() {</span> <span class="kw">return</span> <span class="var">balance</span><span class="op">; }</span>
+<span class="op">}</span>
+
+<span class="cmt">// ── Usage: 3 scenarios ────────────────────────────────────</span>
+<span class="kw">public class</span> <span class="cls">Main</span> <span class="op">{</span>
+    <span class="kw">public static void</span> <span class="fn">main</span><span class="op">(</span><span class="cls">String</span><span class="op">[]</span> <span class="var">args</span><span class="op">) {</span>
+        <span class="cls">BankAccount</span> <span class="var">acc</span> <span class="op">=</span> <span class="kw">new</span> <span class="cls">BankAccount</span><span class="op">(</span><span class="str">"Alice"</span><span class="op">,</span> <span class="num">100.0</span><span class="op">);</span>
+
+        <span class="cmt">// ✅ Scenario 1: Valid withdrawal</span>
+        <span class="kw">try</span> <span class="op">{</span>
+            <span class="var">acc</span><span class="op">.</span><span class="fn">withdraw</span><span class="op">(</span><span class="num">40.0</span><span class="op">);</span>
+            <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="str">"Withdrew $40. Balance: $"</span>
+                <span class="op">+</span> <span class="var">acc</span><span class="op">.</span><span class="fn">getBalance</span><span class="op">());</span>
+        <span class="op">}</span> <span class="kw">catch</span> <span class="op">(</span><span class="cls">InsufficientFundsException</span> <span class="var">e</span><span class="op">) {</span>
+            <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="str">"Error: "</span> <span class="op">+</span> <span class="var">e</span><span class="op">.</span><span class="fn">getMessage</span><span class="op">());</span>
+        <span class="op">}</span>
+
+        <span class="cmt">// ❌ Scenario 2: Overdraft with finally block</span>
+        <span class="kw">try</span> <span class="op">{</span>
+            <span class="var">acc</span><span class="op">.</span><span class="fn">withdraw</span><span class="op">(</span><span class="num">200.0</span><span class="op">);</span>
+        <span class="op">}</span> <span class="kw">catch</span> <span class="op">(</span><span class="cls">InsufficientFundsException</span> <span class="var">e</span><span class="op">) {</span>
+            <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">printf</span><span class="op">(</span>
+                <span class="str">"Failed: %s (shortfall $%.2f)%n"</span><span class="op">,</span>
+                <span class="var">e</span><span class="op">.</span><span class="fn">getMessage</span><span class="op">(),</span>
+                <span class="var">e</span><span class="op">.</span><span class="fn">getShortfall</span><span class="op">());</span>
+        <span class="op">}</span> <span class="kw">finally</span> <span class="op">{</span>
+            <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="str">"Transaction attempt complete."</span><span class="op">);</span>
+        <span class="op">}</span>
+
+        <span class="cmt">// ❌ Scenario 3: Bad argument</span>
+        <span class="kw">try</span> <span class="op">{</span>
+            <span class="var">acc</span><span class="op">.</span><span class="fn">withdraw</span><span class="op">(-</span><span class="num">50</span><span class="op">);</span>
+        <span class="op">}</span> <span class="kw">catch</span> <span class="op">(</span><span class="cls">IllegalArgumentException</span> <span class="var">e</span><span class="op">) {</span>
+            <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="str">"Validation: "</span> <span class="op">+</span> <span class="var">e</span><span class="op">.</span><span class="fn">getMessage</span><span class="op">());</span>
+        <span class="op">}</span> <span class="kw">catch</span> <span class="op">(</span><span class="cls">InsufficientFundsException</span> <span class="var">e</span><span class="op">) {</span>
+            <span class="cls">System</span><span class="op">.</span><span class="var">out</span><span class="op">.</span><span class="fn">println</span><span class="op">(</span><span class="str">"Funds: "</span> <span class="op">+</span> <span class="var">e</span><span class="op">.</span><span class="fn">getMessage</span><span class="op">());</span>
+        <span class="op">}</span>
+    <span class="op">}</span>
+<span class="op">}</span></pre>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="code-dots">
+          <div class="code-dot dot-red"></div>
+          <div class="code-dot dot-yellow"></div>
+          <div class="code-dot dot-green"></div>
+        </div>
+        <span class="terminal-title">▶ Output — All 3 Scenarios</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="t-prompt">$ </span><span class="t-cyan">java</span><span class="t-white"> Main</span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-purple">// Scenario 1 — success</span></div>
+        <div><span class="t-green">Withdrew $40. Balance: $60.0</span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-purple">// Scenario 2 — overdraft + finally</span></div>
+        <div><span class="t-red">Failed: Insufficient funds. Short by: $140.00 (shortfall $140.00)</span></div>
+        <div><span class="t-white">Transaction attempt complete.</span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-purple">// Scenario 3 — bad argument</span></div>
+        <div><span class="t-amber">Validation: Withdrawal amount must be positive.</span></div>
+      </div>
+    </div>
+
+    <div class="tip-box" style="border-left-color: var(--red);">
+      <span class="tip-icon">🚫</span>
+      <span><strong style="color:var(--red)">Never do this:</strong> <code style="color:#fca5a5">catch (Exception e) { }</code> — swallowing exceptions hides bugs silently and makes them nearly impossible to debug. Always at minimum log the error: <code style="color:#fca5a5">e.printStackTrace()</code> or use a proper logger.</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Copy button
+  function copyCode(btn) {
+    const pre = btn.closest('.code-wrap').querySelector('pre');
+    const text = pre.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+</script>
+</body>
+</html>
