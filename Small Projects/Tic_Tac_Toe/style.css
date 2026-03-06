@@ -1,0 +1,7 @@
+body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #282c34; color: white; margin: 0; }
+.board { display: grid; grid-template-columns: repeat(3, 100px); grid-gap: 5px; margin-bottom: 20px; }
+.cell { width: 100px; height: 100px; background-color: #eee; color: #333; display: flex; justify-content: center; align-items: center; font-size: 3em; cursor: pointer; border-radius: 5px; }
+.cell:hover { background-color: #ccc; }
+#status { font-size: 1.5em; margin-bottom: 10px; }
+button { padding: 10px 20px; font-size: 1em; cursor: pointer; border: none; border-radius: 5px; background-color: #61dafb; color: #282c34; }
+button:hover { background-color: #21a1c4; }
