@@ -1,4 +1,4 @@
-body { font-family: 'Arial', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #FFFFFF; transition: 0.3s; }
+body { font-family: 'Arial', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #F8B195; transition: 0.3s; }
 .container { text-align: center; background: rgba(0,0,0,0.1); padding: 40px; border-radius: 10px; }
 h2 { font-size: 2em; margin-bottom: 20px; }
 .color { color: #333; }

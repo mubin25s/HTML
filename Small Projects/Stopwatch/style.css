@@ -1,4 +1,4 @@
-body { margin: 0; padding: 0; background: #2b2a33; display: flex; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; color: white; }
+body { margin: 0; padding: 0; background: radial-gradient(circle at center, #3a3a42 0%, #1e1e24 100%); display: flex; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; color: white; }
 .stopwatch { text-align: center; }
 h1 { font-size: 80px; font-weight: 300; margin-bottom: 30px; }
 .buttons button { width: 100px; padding: 10px; margin: 0 10px; font-size: 18px; border-radius: 5px; border: none; cursor: pointer; color: white; background-color: #555; transition: 0.3s; }
