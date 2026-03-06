@@ -1,5 +1,5 @@
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 .hero { width: 100%; min-height: 100vh; background: linear-gradient(45deg, #0f2027, #203a43, #2c5364); color: #fff; position: relative; display: flex; align-items: center; justify-content: center; }
 .container { width: 800px; height: 180px; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-.clock { display: flex; align-items: center; font-size: 80px; font-weight: 600; }
+.clock { display: flex; align-items: center; font-size: 80px; font-weight: 600; color: #fff; text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 40px #00ffff; font-family: 'Courier New', Courier, monospace; letter-spacing: 5px; }
 .clock span { display: inline-block; text-align: center; margin: 0 10px; width: 120px; }
