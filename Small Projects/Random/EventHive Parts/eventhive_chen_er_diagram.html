@@ -1,0 +1,393 @@
+
+<div style="overflow:auto;width:100%;background:#fff;">
+<svg id="ersvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1800" style="width:1600px;min-width:1600px;font-family:Arial,sans-serif;background:#fff;">
+
+<style>
+.ent rect{fill:#fff;stroke:#000;stroke-width:1.8;}
+.ent text{font-size:13px;font-weight:bold;fill:#000;}
+.rel polygon{fill:#fff;stroke:#000;stroke-width:1.5;}
+.rel text{font-size:11px;fill:#000;}
+.attr ellipse{fill:#fff;stroke:#000;stroke-width:1.2;}
+.attr text{font-size:10px;fill:#000;}
+.attr-pk ellipse{fill:#fff;stroke:#000;stroke-width:1.2;}
+.attr-pk text{font-size:10px;fill:#000;text-decoration:underline;}
+line.conn{stroke:#000;stroke-width:1.2;}
+text.card{font-size:11px;fill:#000;}
+</style>
+
+<!-- ═══════════════════════════════════════════
+     ENTITY: USER  (centre-top)
+═══════════════════════════════════════════ -->
+<g class="ent">
+  <rect x="710" y="340" width="100" height="36"/>
+  <text x="760" y="363" text-anchor="middle">USER</text>
+</g>
+
+<!-- USER attributes -->
+<g class="attr-pk"><ellipse cx="760" cy="220" rx="42" ry="18"/><text x="760" y="224" text-anchor="middle" style="text-decoration:underline">user_id</text></g>
+<line class="conn" x1="760" y1="238" x2="760" y2="340"/>
+
+<g class="attr"><ellipse cx="620" cy="250" rx="30" ry="18"/><text x="620" y="254" text-anchor="middle">name</text></g>
+<line class="conn" x1="648" y1="256" x2="710" y2="346"/>
+
+<g class="attr"><ellipse cx="870" cy="250" rx="32" ry="18"/><text x="870" y="254" text-anchor="middle">email</text></g>
+<line class="conn" x1="842" y1="256" x2="810" y2="346"/>
+
+<g class="attr"><ellipse cx="960" cy="290" rx="32" ry="18"/><text x="960" y="294" text-anchor="middle">phone</text></g>
+<line class="conn" x1="932" y1="289" x2="810" y2="355"/>
+
+<g class="attr"><ellipse cx="560" cy="300" rx="26" ry="18"/><text x="560" y="304" text-anchor="middle">role</text></g>
+<line class="conn" x1="584" y1="306" x2="710" y2="352"/>
+
+<g class="attr"><ellipse cx="680" cy="280" rx="32" ry="18"/><text x="680" y="284" text-anchor="middle">status</text></g>
+<line class="conn" x1="697" y1="295" x2="720" y2="340"/>
+
+<g class="attr"><ellipse cx="840" cy="280" rx="28" ry="18"/><text x="840" y="284" text-anchor="middle">city</text></g>
+<line class="conn" x1="840" y1="298" x2="800" y2="340"/>
+
+<!-- ═══════════════════════════════════════════
+     ENTITY: ADMIN  (centre)
+═══════════════════════════════════════════ -->
+<g class="ent">
+  <rect x="710" y="600" width="100" height="36"/>
+  <text x="760" y="623" text-anchor="middle">ADMIN</text>
+</g>
+
+<!-- ADMIN attributes -->
+<g class="attr-pk"><ellipse cx="660" cy="560" rx="44" ry="18"/><text x="660" y="564" text-anchor="middle" style="text-decoration:underline">admin_id</text></g>
+<line class="conn" x1="700" y1="564" x2="720" y2="600"/>
+
+<g class="attr"><ellipse cx="830" cy="560" rx="44" ry="18"/><text x="830" y="564" text-anchor="middle">access_lvl</text></g>
+<line class="conn" x1="800" y1="564" x2="800" y2="600"/>
+
+<!-- REL: USER MANAGES ADMIN -->
+<g class="rel">
+  <polygon points="760,470 810,497 760,524 710,497"/>
+  <text x="760" y="501" text-anchor="middle">MANAGES</text>
+</g>
+<line class="conn" x1="760" y1="376" x2="760" y2="470"/>
+<text class="card" x="765" y="420">1</text>
+<line class="conn" x1="760" y1="524" x2="760" y2="600"/>
+<text class="card" x="765" y="570">M</text>
+
+<!-- ═══════════════════════════════════════════
+     ENTITY: VOLUNTEER  (left-centre)
+═══════════════════════════════════════════ -->
+<g class="ent">
+  <rect x="260" y="600" width="120" height="36"/>
+  <text x="320" y="623" text-anchor="middle">VOLUNTEER</text>
+</g>
+
+<!-- VOLUNTEER attributes -->
+<g class="attr-pk"><ellipse cx="180" cy="560" rx="52" ry="18"/><text x="180" y="564" text-anchor="middle" style="text-decoration:underline">volunteer_id</text></g>
+<line class="conn" x1="228" y1="564" x2="280" y2="600"/>
+
+<g class="attr"><ellipse cx="320" cy="540" rx="48" ry="18"/><text x="320" y="544" text-anchor="middle">availability</text></g>
+<line class="conn" x1="320" y1="558" x2="320" y2="600"/>
+
+<g class="attr"><ellipse cx="440" cy="560" rx="52" ry="18"/><text x="440" y="564" text-anchor="middle">verified_status</text></g>
+<line class="conn" x1="440" y1="578" x2="390" y2="600"/>
+
+<g class="attr"><ellipse cx="200" cy="660" rx="44" ry="18"/><text x="200" y="664" text-anchor="middle">del_count</text></g>
+<line class="conn" x1="240" y1="660" x2="260" y2="626"/>
+
+<!-- REL: USER REGISTERS VOLUNTEER -->
+<g class="rel">
+  <polygon points="520,480 570,507 520,534 470,507"/>
+  <text x="520" y="511" text-anchor="middle">REGISTERS</text>
+</g>
+<line class="conn" x1="710" y1="358" x2="570" y2="507"/>
+<text class="card" x="660" y="420">1</text>
+<line class="conn" x1="470" y1="507" x2="380" y2="614"/>
+<text class="card" x="415" y="545">M</text>
+
+<!-- ═══════════════════════════════════════════
+     ENTITY: EVENT  (right-centre)
+═══════════════════════════════════════════ -->
+<g class="ent">
+  <rect x="1100" y="340" width="100" height="36"/>
+  <text x="1150" y="363" text-anchor="middle">EVENT</text>
+</g>
+
+<!-- EVENT attributes -->
+<g class="attr-pk"><ellipse cx="1150" cy="220" rx="42" ry="18"/><text x="1150" y="224" text-anchor="middle" style="text-decoration:underline">event_id</text></g>
+<line class="conn" x1="1150" y1="238" x2="1150" y2="340"/>
+
+<g class="attr"><ellipse cx="1050" cy="260" rx="30" ry="18"/><text x="1050" y="264" text-anchor="middle">title</text></g>
+<line class="conn" x1="1075" y1="267" x2="1110" y2="346"/>
+
+<g class="attr"><ellipse cx="1260" cy="260" rx="48" ry="18"/><text x="1260" y="264" text-anchor="middle">event_type</text></g>
+<line class="conn" x1="1235" y1="267" x2="1190" y2="346"/>
+
+<g class="attr"><ellipse cx="1340" cy="310" rx="30" ry="18"/><text x="1340" y="314" text-anchor="middle">venue</text></g>
+<line class="conn" x1="1316" y1="314" x2="1200" y2="352"/>
+
+<g class="attr"><ellipse cx="980" cy="310" rx="32" ry="18"/><text x="980" y="314" text-anchor="middle">status</text></g>
+<line class="conn" x1="1008" y1="316" x2="1100" y2="352"/>
+
+<g class="attr"><ellipse cx="1080" cy="290" rx="36" ry="18"/><text x="1080" y="294" text-anchor="middle">event_date</text></g>
+<line class="conn" x1="1097" y1="302" x2="1115" y2="340"/>
+
+<!-- REL: ADMIN ORGANIZES EVENT -->
+<g class="rel">
+  <polygon points="940,490 990,517 940,544 890,517"/>
+  <text x="940" y="521" text-anchor="middle">ORGANIZES</text>
+</g>
+<line class="conn" x1="810" y1="616" x2="890" y2="517"/>
+<text class="card" x="840" y="555">M</text>
+<line class="conn" x1="990" y1="517" x2="1100" y2="358"/>
+<text class="card" x="1065" y="430">1</text>
+
+<!-- ═══════════════════════════════════════════
+     ENTITY: TASK  (right-lower)
+═══════════════════════════════════════════ -->
+<g class="ent">
+  <rect x="1100" y="750" width="100" height="36"/>
+  <text x="1150" y="773" text-anchor="middle">TASK</text>
+</g>
+
+<!-- TASK attributes -->
+<g class="attr-pk"><ellipse cx="1050" cy="710" rx="38" ry="18"/><text x="1050" y="714" text-anchor="middle" style="text-decoration:underline">task_id</text></g>
+<line class="conn" x1="1085" y1="714" x2="1115" y2="750"/>
+
+<g class="attr"><ellipse cx="1160" cy="700" rx="30" ry="18"/><text x="1160" y="704" text-anchor="middle">title</text></g>
+<line class="conn" x1="1160" y1="718" x2="1155" y2="750"/>
+
+<g class="attr"><ellipse cx="1270" cy="710" rx="32" ry="18"/><text x="1270" y="714" text-anchor="middle">status</text></g>
+<line class="conn" x1="1249" y1="716" x2="1200" y2="754"/>
+
+<g class="attr"><ellipse cx="1340" cy="770" rx="40" ry="18"/><text x="1340" y="774" text-anchor="middle">due_date</text></g>
+<line class="conn" x1="1302" y1="772" x2="1200" y2="770"/>
+
+<!-- REL: EVENT HAS TASK -->
+<g class="rel">
+  <polygon points="1150,600 1200,627 1150,654 1100,627"/>
+  <text x="1150" y="631" text-anchor="middle">HAS</text>
+</g>
+<line class="conn" x1="1150" y1="376" x2="1150" y2="600"/>
+<text class="card" x="1155" y="490">1</text>
+<line class="conn" x1="1150" y1="654" x2="1150" y2="750"/>
+<text class="card" x="1155" y="710">M</text>
+
+<!-- REL: VOLUNTEER ASSIGNED TASK -->
+<g class="rel">
+  <polygon points="700,760 750,787 700,814 650,787"/>
+  <text x="700" y="791" text-anchor="middle">ASSIGNED</text>
+</g>
+<line class="conn" x1="380" y1="622" x2="650" y2="787"/>
+<text class="card" x="470" y="700">M</text>
+<line class="conn" x1="750" y1="787" x2="1100" y2="770"/>
+<text class="card" x="1060" y="783">M</text>
+
+<!-- ═══════════════════════════════════════════
+     ENTITY: DONATION  (far-left)
+═══════════════════════════════════════════ -->
+<g class="ent">
+  <rect x="100" y="340" width="110" height="36"/>
+  <text x="155" y="363" text-anchor="middle">DONATION</text>
+</g>
+
+<!-- DONATION attributes -->
+<g class="attr-pk"><ellipse cx="80" cy="230" rx="50" ry="18"/><text x="80" y="234" text-anchor="middle" style="text-decoration:underline">donation_id</text></g>
+<line class="conn" x1="100" y1="240" x2="130" y2="340"/>
+
+<g class="attr"><ellipse cx="200" cy="240" rx="42" ry="18"/><text x="200" y="244" text-anchor="middle">category</text></g>
+<line class="conn" x1="184" y1="254" x2="170" y2="340"/>
+
+<g class="attr"><ellipse cx="60" cy="310" rx="42" ry="18"/><text x="60" y="314" text-anchor="middle">item_type</text></g>
+<line class="conn" x1="98" y1="318" x2="118" y2="348"/>
+
+<g class="attr"><ellipse cx="240" cy="310" rx="40" ry="18"/><text x="240" y="314" text-anchor="middle">quantity</text></g>
+<line class="conn" x1="216" y1="320" x2="196" y2="348"/>
+
+<g class="attr"><ellipse cx="100" cy="420" rx="48" ry="18"/><text x="100" y="424" text-anchor="middle">expiry_date</text></g>
+<line class="conn" x1="143" y1="420" x2="155" y2="376"/>
+
+<g class="attr"><ellipse cx="220" cy="420" rx="40" ry="18"/><text x="220" y="424" text-anchor="middle">d_status</text></g>
+<line class="conn" x1="197" y1="415" x2="185" y2="376"/>
+
+<!-- REL: USER MAKES DONATION -->
+<g class="rel">
+  <polygon points="430,360 480,387 430,414 380,387"/>
+  <text x="430" y="391" text-anchor="middle">MAKES</text>
+</g>
+<line class="conn" x1="710" y1="358" x2="480" y2="387"/>
+<text class="card" x="600" y="375">1</text>
+<line class="conn" x1="380" y1="387" x2="210" y2="360"/>
+<text class="card" x="260" y="377">M</text>
+
+<!-- ═══════════════════════════════════════════
+     ENTITY: SCHEDULE  (far-left-lower)
+═══════════════════════════════════════════ -->
+<g class="ent">
+  <rect x="80" y="750" width="110" height="36"/>
+  <text x="135" y="773" text-anchor="middle">SCHEDULE</text>
+</g>
+
+<!-- SCHEDULE attributes -->
+<g class="attr-pk"><ellipse cx="60" cy="700" rx="40" ry="18"/><text x="60" y="704" text-anchor="middle" style="text-decoration:underline">sched_id</text></g>
+<line class="conn" x1="93" y1="704" x2="105" y2="750"/>
+
+<g class="attr"><ellipse cx="180" cy="700" rx="50" ry="18"/><text x="180" y="704" text-anchor="middle">pickup_time</text></g>
+<line class="conn" x1="168" y1="716" x2="155" y2="750"/>
+
+<g class="attr"><ellipse cx="60" cy="830" rx="50" ry="18"/><text x="60" y="834" text-anchor="middle">pickup_date</text></g>
+<line class="conn" x1="100" y1="832" x2="112" y2="786"/>
+
+<g class="attr"><ellipse cx="200" cy="830" rx="56" ry="18"/><text x="200" y="834" text-anchor="middle">reminder_sent</text></g>
+<line class="conn" x1="167" y1="828" x2="158" y2="786"/>
+
+<!-- REL: DONATION HAS SCHEDULE -->
+<g class="rel">
+  <polygon points="155,570 205,597 155,624 105,597"/>
+  <text x="155" y="601" text-anchor="middle">HAS</text>
+</g>
+<line class="conn" x1="155" y1="376" x2="155" y2="570"/>
+<text class="card" x="160" y="470">1</text>
+<line class="conn" x1="155" y1="624" x2="135" y2="750"/>
+<text class="card" x="140" y="694">M</text>
+
+<!-- REL: VOLUNTEER ASSIGNED SCHEDULE -->
+<g class="rel">
+  <polygon points="320,700 370,727 320,754 270,727"/>
+  <text x="320" y="731" text-anchor="middle">ASSIGNED</text>
+</g>
+<line class="conn" x1="320" y1="636" x2="320" y2="700"/>
+<text class="card" x="325" y="673">1</text>
+<line class="conn" x1="270" y1="727" x2="190" y2="760"/>
+<text class="card" x="215" y="738">M</text>
+
+<!-- ═══════════════════════════════════════════
+     ENTITY: REQUEST  (far-right)
+═══════════════════════════════════════════ -->
+<g class="ent">
+  <rect x="1360" y="480" width="100" height="36"/>
+  <text x="1410" y="503" text-anchor="middle">REQUEST</text>
+</g>
+
+<!-- REQUEST attributes -->
+<g class="attr-pk"><ellipse cx="1360" cy="380" rx="50" ry="18"/><text x="1360" y="384" text-anchor="middle" style="text-decoration:underline">request_id</text></g>
+<line class="conn" x1="1370" y1="397" x2="1380" y2="480"/>
+
+<g class="attr"><ellipse cx="1470" cy="410" rx="46" ry="18"/><text x="1470" y="414" text-anchor="middle">req_status</text></g>
+<line class="conn" x1="1438" y1="416" x2="1430" y2="480"/>
+
+<g class="attr"><ellipse cx="1490" cy="500" rx="46" ry="18"/><text x="1490" y="504" text-anchor="middle">item_type</text></g>
+<line class="conn" x1="1460" y1="500" x2="1460" y2="500"/>
+
+<g class="attr"><ellipse cx="1490" cy="560" rx="40" ry="18"/><text x="1490" y="564" text-anchor="middle">priority</text></g>
+<line class="conn" x1="1460" y1="558" x2="1460" y2="516"/>
+
+<!-- REL: USER SUBMITS REQUEST -->
+<g class="rel">
+  <polygon points="1080,430 1130,457 1080,484 1030,457"/>
+  <text x="1080" y="461" text-anchor="middle">SUBMITS</text>
+</g>
+<line class="conn" x1="810" y1="358" x2="1030" y2="457"/>
+<text class="card" x="900" y="395">1</text>
+<line class="conn" x1="1130" y1="457" x2="1360" y2="493"/>
+<text class="card" x="1290" y="472">M</text>
+
+<!-- ═══════════════════════════════════════════
+     ENTITY: NOTIFICATION  (far-right-lower)
+═══════════════════════════════════════════ -->
+<g class="ent">
+  <rect x="1340" y="750" width="130" height="36"/>
+  <text x="1405" y="773" text-anchor="middle">NOTIFICATION</text>
+</g>
+
+<!-- NOTIFICATION attributes -->
+<g class="attr-pk"><ellipse cx="1310" cy="700" rx="70" ry="18"/><text x="1310" y="704" text-anchor="middle" style="text-decoration:underline">notification_id</text></g>
+<line class="conn" x1="1340" y1="716" x2="1360" y2="750"/>
+
+<g class="attr"><ellipse cx="1470" cy="700" rx="42" ry="18"/><text x="1470" y="704" text-anchor="middle">message</text></g>
+<line class="conn" x1="1451" y1="714" x2="1440" y2="750"/>
+
+<g class="attr"><ellipse cx="1500" cy="800" rx="36" ry="18"/><text x="1500" y="804" text-anchor="middle">sent_at</text></g>
+<line class="conn" x1="1470" y1="800" x2="1470" y2="786"/>
+
+<!-- REL: REQUEST TRIGGERS NOTIFICATION -->
+<g class="rel">
+  <polygon points="1405,630 1455,657 1405,684 1355,657"/>
+  <text x="1405" y="661" text-anchor="middle">TRIGGERS</text>
+</g>
+<line class="conn" x1="1410" y1="516" x2="1405" y2="630"/>
+<text class="card" x="1415" y="570">1</text>
+<line class="conn" x1="1405" y1="684" x2="1405" y2="750"/>
+<text class="card" x="1410" y="724">M</text>
+
+<!-- REL: USER RECEIVES NOTIFICATION -->
+<g class="rel">
+  <polygon points="1080,630 1130,657 1080,684 1030,657"/>
+  <text x="1080" y="661" text-anchor="middle">RECEIVES</text>
+</g>
+<line class="conn" x1="810" y1="358" x2="810" y2="500"/>
+<line class="conn" x1="810" y1="500" x2="1030" y2="657"/>
+<text class="card" x="820" y="490">1</text>
+<line class="conn" x1="1130" y1="657" x2="1340" y2="762"/>
+<text class="card" x="1290" y="710">M</text>
+
+<!-- ═══════════════════════════════════════════
+     ENTITY: FEEDBACK  (top-right)
+═══════════════════════════════════════════ -->
+<g class="ent">
+  <rect x="1100" y="100" width="110" height="36"/>
+  <text x="1155" y="123" text-anchor="middle">FEEDBACK</text>
+</g>
+
+<!-- FEEDBACK attributes -->
+<g class="attr-pk"><ellipse cx="1060" cy="50" rx="52" ry="18"/><text x="1060" y="54" text-anchor="middle" style="text-decoration:underline">feedback_id</text></g>
+<line class="conn" x1="1082" y1="66" x2="1120" y2="100"/>
+
+<g class="attr"><ellipse cx="1200" cy="50" rx="32" ry="18"/><text x="1200" y="54" text-anchor="middle">rating</text></g>
+<line class="conn" x1="1190" y1="67" x2="1178" y2="100"/>
+
+<g class="attr"><ellipse cx="1310" cy="90" rx="40" ry="18"/><text x="1310" y="94" text-anchor="middle">comment</text></g>
+<line class="conn" x1="1276" y1="95" x2="1210" y2="114"/>
+
+<!-- REL: USER GIVES FEEDBACK -->
+<g class="rel">
+  <polygon points="960,200 1010,227 960,254 910,227"/>
+  <text x="960" y="231" text-anchor="middle">GIVES</text>
+</g>
+<line class="conn" x1="760" y1="340" x2="910" y2="227"/>
+<text class="card" x="820" y="275">1</text>
+<line class="conn" x1="1010" y1="227" x2="1100" y2="127"/>
+<text class="card" x="1075" y="165">M</text>
+
+<!-- ═══════════════════════════════════════════
+     ENTITY: SESSION  (bottom-centre)
+═══════════════════════════════════════════ -->
+<g class="ent">
+  <rect x="700" y="1020" width="110" height="36"/>
+  <text x="755" y="1043" text-anchor="middle">SESSION</text>
+</g>
+
+<!-- SESSION attributes -->
+<g class="attr-pk"><ellipse cx="660" cy="970" rx="48" ry="18"/><text x="660" y="974" text-anchor="middle" style="text-decoration:underline">session_id</text></g>
+<line class="conn" x1="694" y1="974" x2="720" y2="1020"/>
+
+<g class="attr"><ellipse cx="780" cy="960" rx="30" ry="18"/><text x="780" y="964" text-anchor="middle">token</text></g>
+<line class="conn" x1="772" y1="977" x2="762" y2="1020"/>
+
+<g class="attr"><ellipse cx="560" cy="1040" rx="50" ry="18"/><text x="560" y="1044" text-anchor="middle">created_at</text></g>
+<line class="conn" x1="608" y1="1044" x2="700" y2="1043"/>
+
+<g class="attr"><ellipse cx="920" cy="1040" rx="50" ry="18"/><text x="920" y="1044" text-anchor="middle">expires_at</text></g>
+<line class="conn" x1="872" y1="1044" x2="810" y2="1043"/>
+
+<g class="attr"><ellipse cx="755" cy="1120" rx="44" ry="18"/><text x="755" y="1124" text-anchor="middle">is_active</text></g>
+<line class="conn" x1="755" y1="1104" x2="755" y2="1056"/>
+
+<!-- REL: USER HAS SESSION -->
+<g class="rel">
+  <polygon points="755,840 805,867 755,894 705,867"/>
+  <text x="755" y="871" text-anchor="middle">HAS</text>
+</g>
+<line class="conn" x1="760" y1="376" x2="755" y2="840"/>
+<text class="card" x="762" y="600">1</text>
+<line class="conn" x1="755" y1="894" x2="755" y2="1020"/>
+<text class="card" x="762" y="965">M</text>
+
+</svg>
+</div>

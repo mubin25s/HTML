@@ -1,0 +1,349 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+#wrap{overflow-x:auto;padding:10px;background:transparent}
+svg{display:block}
+</style>
+<div id="wrap">
+<svg viewBox="0 0 1300 1020" xmlns="http://www.w3.org/2000/svg" style="min-width:900px;width:100%;height:auto">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+    <path d="M0 0L10 5L0 10" fill="none" stroke="#555" stroke-width="1.2"/>
+  </marker>
+  <marker id="open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+    <path d="M0 0L10 5L0 10" fill="none" stroke="#555" stroke-width="1.2"/>
+  </marker>
+  <marker id="diamond-filled" viewBox="0 0 14 10" refX="14" refY="5" markerWidth="10" markerHeight="8" orient="auto-start-reverse">
+    <polygon points="0,5 7,0 14,5 7,10" fill="#555"/>
+  </marker>
+  <marker id="diamond-open" viewBox="0 0 14 10" refX="14" refY="5" markerWidth="10" markerHeight="8" orient="auto-start-reverse">
+    <polygon points="0,5 7,0 14,5 7,10" fill="white" stroke="#555" stroke-width="1"/>
+  </marker>
+  <marker id="tri" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+    <polygon points="0,0 10,5 0,10" fill="white" stroke="#555" stroke-width="1.2"/>
+  </marker>
+</defs>
+
+<!-- ══════════════════════════════════════════════
+     HELPER: class box = header + section dividers
+     Color scheme:
+       User/Auth  → purple  #534AB7 / #EEEDFE
+       Role       → teal    #0F6E56 / #E1F5EE
+       Session    → teal
+       Event      → amber   #854F0B / #FAEEDA
+       Task       → coral   #993C1D / #FAECE7
+       Logs       → gray    #5F5E5A / #F1EFE8
+       Attendee   → blue    #185FA5 / #E6F1FB
+══════════════════════════════════════════════ -->
+
+<!-- ═══════ CLASS: User  x=20 y=60 w=230 ═══════ -->
+<g id="cls-user">
+  <!-- header -->
+  <rect x="20" y="60" width="230" height="32" rx="0" fill="#EEEDFE" stroke="#534AB7" stroke-width="1.5"/>
+  <text font-size="13" font-weight="700" fill="#3C3489" x="135" y="81" text-anchor="middle">User</text>
+  <!-- attributes section -->
+  <rect x="20" y="92" width="230" height="168" rx="0" fill="white" stroke="#534AB7" stroke-width="1"/>
+  <text font-size="10" fill="#534AB7" x="30" y="107">- user_id : int  {PK}</text>
+  <text font-size="10" fill="#222" x="30" y="122">- user_name : String</text>
+  <text font-size="10" fill="#222" x="30" y="137">- email : String</text>
+  <text font-size="10" fill="#222" x="30" y="152">- password : String</text>
+  <text font-size="10" fill="#534AB7" x="30" y="167">- role_id : int  {FK}</text>
+  <text font-size="10" fill="#222" x="30" y="182">- is_active : Boolean</text>
+  <text font-size="10" fill="#222" x="30" y="197">- created_at : DateTime</text>
+  <text font-size="10" fill="#222" x="30" y="212">- updated_at : DateTime</text>
+  <!-- methods section -->
+  <line x1="20" y1="218" x2="250" y2="218" stroke="#534AB7" stroke-width="0.8"/>
+  <rect x="20" y="218" width="230" height="108" rx="0" fill="white" stroke="#534AB7" stroke-width="1"/>
+  <text font-size="10" fill="#222" x="30" y="233">+ register() : Boolean</text>
+  <text font-size="10" fill="#222" x="30" y="248">+ login() : Session</text>
+  <text font-size="10" fill="#222" x="30" y="263">+ logout() : void</text>
+  <text font-size="10" fill="#222" x="30" y="278">+ updateProfile() : Boolean</text>
+  <text font-size="10" fill="#222" x="30" y="293">+ validateCredentials() : Boolean</text>
+  <text font-size="10" fill="#222" x="30" y="308">+ getRole() : Role</text>
+</g>
+
+<!-- ═══════ CLASS: UserProfile  x=20 y=360 w=230 ═══════ -->
+<g id="cls-profile">
+  <rect x="20" y="370" width="230" height="32" rx="0" fill="#EEEDFE" stroke="#534AB7" stroke-width="1.5"/>
+  <text font-size="13" font-weight="700" fill="#3C3489" x="135" y="391" text-anchor="middle">UserProfile</text>
+  <rect x="20" y="402" width="230" height="118" rx="0" fill="white" stroke="#534AB7" stroke-width="1"/>
+  <text font-size="10" fill="#534AB7" x="30" y="417">- profile_id : int  {PK}</text>
+  <text font-size="10" fill="#534AB7" x="30" y="432">- user_id : int  {FK}</text>
+  <text font-size="10" fill="#222" x="30" y="447">- phone : String</text>
+  <text font-size="10" fill="#222" x="30" y="462">- address : String</text>
+  <text font-size="10" fill="#222" x="30" y="477">- profile_picture : String</text>
+  <text font-size="10" fill="#222" x="30" y="492">- last_updated : DateTime</text>
+  <line x1="20" y1="498" x2="250" y2="498" stroke="#534AB7" stroke-width="0.8"/>
+  <rect x="20" y="498" width="230" height="68" rx="0" fill="white" stroke="#534AB7" stroke-width="1"/>
+  <text font-size="10" fill="#222" x="30" y="513">+ viewProfile() : UserProfile</text>
+  <text font-size="10" fill="#222" x="30" y="528">+ editProfile() : Boolean</text>
+  <text font-size="10" fill="#222" x="30" y="543">+ validateData() : Boolean</text>
+  <text font-size="10" fill="#222" x="30" y="558">+ showConfirmation() : void</text>
+</g>
+
+<!-- ═══════ CLASS: Role  x=310 y=60 w=220 ═══════ -->
+<g id="cls-role">
+  <rect x="310" y="60" width="220" height="32" rx="0" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/>
+  <text font-size="13" font-weight="700" fill="#085041" x="420" y="81" text-anchor="middle">Role</text>
+  <rect x="310" y="92" width="220" height="98" rx="0" fill="white" stroke="#0F6E56" stroke-width="1"/>
+  <text font-size="10" fill="#0F6E56" x="320" y="107">- role_id : int  {PK}</text>
+  <text font-size="10" fill="#222" x="320" y="122">- role_name : String</text>
+  <text font-size="10" fill="#222" x="320" y="137">- permissions : String</text>
+  <text font-size="10" fill="#222" x="320" y="152">- description : String</text>
+  <text font-size="10" fill="#222" x="320" y="167">- created_at : DateTime</text>
+  <line x1="310" y1="178" x2="530" y2="178" stroke="#0F6E56" stroke-width="0.8"/>
+  <rect x="310" y="178" width="220" height="68" rx="0" fill="white" stroke="#0F6E56" stroke-width="1"/>
+  <text font-size="10" fill="#222" x="320" y="193">+ assignRole() : void</text>
+  <text font-size="10" fill="#222" x="320" y="208">+ getPermissions() : String</text>
+  <text font-size="10" fill="#222" x="320" y="223">+ validateAccess() : Boolean</text>
+  <text font-size="10" fill="#222" x="320" y="238">+ grantAccess() : Boolean</text>
+</g>
+
+<!-- ═══════ CLASS: Session  x=310 y=320 w=220 ═══════ -->
+<g id="cls-session">
+  <rect x="310" y="320" width="220" height="32" rx="0" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/>
+  <text font-size="13" font-weight="700" fill="#085041" x="420" y="341" text-anchor="middle">Session</text>
+  <rect x="310" y="352" width="220" height="138" rx="0" fill="white" stroke="#0F6E56" stroke-width="1"/>
+  <text font-size="10" fill="#0F6E56" x="320" y="367">- session_id : int  {PK}</text>
+  <text font-size="10" fill="#0F6E56" x="320" y="382">- user_id : int  {FK}</text>
+  <text font-size="10" fill="#222" x="320" y="397">- auth_token : String</text>
+  <text font-size="10" fill="#222" x="320" y="412">- login_time : DateTime</text>
+  <text font-size="10" fill="#222" x="320" y="427">- logout_time : DateTime</text>
+  <text font-size="10" fill="#222" x="320" y="442">- is_active : Boolean</text>
+  <text font-size="10" fill="#222" x="320" y="457">- expires_at : DateTime</text>
+  <line x1="310" y1="478" x2="530" y2="478" stroke="#0F6E56" stroke-width="0.8"/>
+  <rect x="310" y="478" width="220" height="83" rx="0" fill="white" stroke="#0F6E56" stroke-width="1"/>
+  <text font-size="10" fill="#222" x="320" y="493">+ issueToken() : String</text>
+  <text font-size="10" fill="#222" x="320" y="508">+ invalidateSession() : void</text>
+  <text font-size="10" fill="#222" x="320" y="523">+ checkInactivity() : Boolean</text>
+  <text font-size="10" fill="#222" x="320" y="538">+ autoLogout() : void</text>
+  <text font-size="10" fill="#222" x="320" y="553">+ isExpired() : Boolean</text>
+</g>
+
+<!-- ═══════ CLASS: Attendee  x=310 y=640 w=220 ═══════ -->
+<g id="cls-attendee">
+  <rect x="310" y="640" width="220" height="32" rx="0" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+  <text font-size="13" font-weight="700" fill="#0C447C" x="420" y="661" text-anchor="middle">Attendee</text>
+  <rect x="310" y="672" width="220" height="108" rx="0" fill="white" stroke="#185FA5" stroke-width="1"/>
+  <text font-size="10" fill="#185FA5" x="320" y="687">- attendee_id : int  {PK}</text>
+  <text font-size="10" fill="#185FA5" x="320" y="702">- user_id : int  {FK}</text>
+  <text font-size="10" fill="#222" x="320" y="717">- ticket_code : String</text>
+  <text font-size="10" fill="#222" x="320" y="732">- registered_at : DateTime</text>
+  <text font-size="10" fill="#222" x="320" y="747">- checked_in : Boolean</text>
+  <line x1="310" y1="768" x2="530" y2="768" stroke="#185FA5" stroke-width="0.8"/>
+  <rect x="310" y="768" width="220" height="68" rx="0" fill="white" stroke="#185FA5" stroke-width="1"/>
+  <text font-size="10" fill="#222" x="320" y="783">+ register() : Boolean</text>
+  <text font-size="10" fill="#222" x="320" y="798">+ checkIn() : void</text>
+  <text font-size="10" fill="#222" x="320" y="813">+ getTicket() : String</text>
+  <text font-size="10" fill="#222" x="320" y="828">+ viewEventDetails() : Event</text>
+</g>
+
+<!-- ═══════ CLASS: Event  x=610 y=60 w=240 ═══════ -->
+<g id="cls-event">
+  <rect x="610" y="60" width="240" height="32" rx="0" fill="#FAEEDA" stroke="#854F0B" stroke-width="1.5"/>
+  <text font-size="13" font-weight="700" fill="#412402" x="730" y="81" text-anchor="middle">Event</text>
+  <rect x="610" y="92" width="240" height="218" rx="0" fill="white" stroke="#854F0B" stroke-width="1"/>
+  <text font-size="10" fill="#854F0B" x="620" y="107">- event_id : int  {PK}</text>
+  <text font-size="10" fill="#854F0B" x="620" y="122">- organizer_id : int  {FK}</text>
+  <text font-size="10" fill="#222" x="620" y="137">- title : String</text>
+  <text font-size="10" fill="#222" x="620" y="152">- description : String</text>
+  <text font-size="10" fill="#222" x="620" y="167">- event_type : String</text>
+  <text font-size="10" fill="#222" x="620" y="182">- venue : String</text>
+  <text font-size="10" fill="#222" x="620" y="197">- start_time : DateTime</text>
+  <text font-size="10" fill="#222" x="620" y="212">- end_time : DateTime</text>
+  <text font-size="10" fill="#222" x="620" y="227">- status : String</text>
+  <text font-size="10" fill="#222" x="620" y="242">- created_at : DateTime</text>
+  <text font-size="10" fill="#222" x="620" y="257">- updated_at : DateTime</text>
+  <line x1="610" y1="298" x2="850" y2="298" stroke="#854F0B" stroke-width="0.8"/>
+  <rect x="610" y="298" width="240" height="108" rx="0" fill="white" stroke="#854F0B" stroke-width="1"/>
+  <text font-size="10" fill="#222" x="620" y="313">+ createEvent() : Event</text>
+  <text font-size="10" fill="#222" x="620" y="328">+ modifyEvent() : Boolean</text>
+  <text font-size="10" fill="#222" x="620" y="343">+ publishEvent() : void</text>
+  <text font-size="10" fill="#222" x="620" y="358">+ closeEvent() : void</text>
+  <text font-size="10" fill="#222" x="620" y="373">+ getStatus() : String</text>
+  <text font-size="10" fill="#222" x="620" y="388">+ updateStatus() : void</text>
+</g>
+
+<!-- ═══════ CLASS: EventStatusLog  x=610 y=440 w=240 ═══════ -->
+<g id="cls-evtlog">
+  <rect x="610" y="450" width="240" height="32" rx="0" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="1.5"/>
+  <text font-size="13" font-weight="700" fill="#2C2C2A" x="730" y="471" text-anchor="middle">EventStatusLog</text>
+  <rect x="610" y="482" width="240" height="128" rx="0" fill="white" stroke="#5F5E5A" stroke-width="1"/>
+  <text font-size="10" fill="#5F5E5A" x="620" y="497">- log_id : int  {PK}</text>
+  <text font-size="10" fill="#5F5E5A" x="620" y="512">- event_id : int  {FK}</text>
+  <text font-size="10" fill="#5F5E5A" x="620" y="527">- changed_by : int  {FK}</text>
+  <text font-size="10" fill="#222" x="620" y="542">- old_status : String</text>
+  <text font-size="10" fill="#222" x="620" y="557">- new_status : String</text>
+  <text font-size="10" fill="#222" x="620" y="572">- changed_at : DateTime</text>
+  <line x1="610" y1="598" x2="850" y2="598" stroke="#5F5E5A" stroke-width="0.8"/>
+  <rect x="610" y="598" width="240" height="68" rx="0" fill="white" stroke="#5F5E5A" stroke-width="1"/>
+  <text font-size="10" fill="#222" x="620" y="613">+ logChange() : void</text>
+  <text font-size="10" fill="#222" x="620" y="628">+ getHistory() : List</text>
+  <text font-size="10" fill="#222" x="620" y="643">+ getLatestStatus() : String</text>
+  <text font-size="10" fill="#222" x="620" y="658">+ notifyStatusChange() : void</text>
+</g>
+
+<!-- ═══════ CLASS: Task  x=920 y=60 w=240 ═══════ -->
+<g id="cls-task">
+  <rect x="920" y="60" width="240" height="32" rx="0" fill="#FAECE7" stroke="#993C1D" stroke-width="1.5"/>
+  <text font-size="13" font-weight="700" fill="#4A1B0C" x="1040" y="81" text-anchor="middle">Task</text>
+  <rect x="920" y="92" width="240" height="238" rx="0" fill="white" stroke="#993C1D" stroke-width="1"/>
+  <text font-size="10" fill="#993C1D" x="930" y="107">- task_id : int  {PK}</text>
+  <text font-size="10" fill="#993C1D" x="930" y="122">- event_id : int  {FK}</text>
+  <text font-size="10" fill="#993C1D" x="930" y="137">- assigned_to : int  {FK}</text>
+  <text font-size="10" fill="#993C1D" x="930" y="152">- created_by : int  {FK}</text>
+  <text font-size="10" fill="#222" x="930" y="167">- title : String</text>
+  <text font-size="10" fill="#222" x="930" y="182">- description : String</text>
+  <text font-size="10" fill="#222" x="930" y="197">- priority : String</text>
+  <text font-size="10" fill="#222" x="930" y="212">- status : String</text>
+  <text font-size="10" fill="#222" x="930" y="227">- deadline : DateTime</text>
+  <text font-size="10" fill="#222" x="930" y="242">- due_date : DateTime</text>
+  <text font-size="10" fill="#222" x="930" y="257">- created_at : DateTime</text>
+  <text font-size="10" fill="#222" x="930" y="272">- closed_at : DateTime</text>
+  <line x1="920" y1="318" x2="1160" y2="318" stroke="#993C1D" stroke-width="0.8"/>
+  <rect x="920" y="318" width="240" height="108" rx="0" fill="white" stroke="#993C1D" stroke-width="1"/>
+  <text font-size="10" fill="#222" x="930" y="333">+ createTask() : Task</text>
+  <text font-size="10" fill="#222" x="930" y="348">+ assignTask() : Boolean</text>
+  <text font-size="10" fill="#222" x="930" y="363">+ trackProgress() : String</text>
+  <text font-size="10" fill="#222" x="930" y="378">+ updateStatus() : void</text>
+  <text font-size="10" fill="#222" x="930" y="393">+ closeTask() : void</text>
+  <text font-size="10" fill="#222" x="930" y="408">+ notifyAssignee() : void</text>
+</g>
+
+<!-- ═══════ CLASS: TaskProgressLog  x=920 y=460 w=240 ═══════ -->
+<g id="cls-tasklog">
+  <rect x="920" y="460" width="240" height="32" rx="0" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="1.5"/>
+  <text font-size="13" font-weight="700" fill="#2C2C2A" x="1040" y="481" text-anchor="middle">TaskProgressLog</text>
+  <rect x="920" y="492" width="240" height="138" rx="0" fill="white" stroke="#5F5E5A" stroke-width="1"/>
+  <text font-size="10" fill="#5F5E5A" x="930" y="507">- progress_id : int  {PK}</text>
+  <text font-size="10" fill="#5F5E5A" x="930" y="522">- task_id : int  {FK}</text>
+  <text font-size="10" fill="#5F5E5A" x="930" y="537">- updated_by : int  {FK}</text>
+  <text font-size="10" fill="#222" x="930" y="552">- old_status : String</text>
+  <text font-size="10" fill="#222" x="930" y="567">- new_status : String</text>
+  <text font-size="10" fill="#222" x="930" y="582">- note : String</text>
+  <text font-size="10" fill="#222" x="930" y="597">- updated_at : DateTime</text>
+  <line x1="920" y1="618" x2="1160" y2="618" stroke="#5F5E5A" stroke-width="0.8"/>
+  <rect x="920" y="618" width="240" height="83" rx="0" fill="white" stroke="#5F5E5A" stroke-width="1"/>
+  <text font-size="10" fill="#222" x="930" y="633">+ logProgress() : void</text>
+  <text font-size="10" fill="#222" x="930" y="648">+ getProgressHistory() : List</text>
+  <text font-size="10" fill="#222" x="930" y="663">+ getLatestStatus() : String</text>
+  <text font-size="10" fill="#222" x="930" y="678">+ notifyOrganizer() : void</text>
+  <text font-size="10" fill="#222" x="930" y="693">+ closeProgress() : void</text>
+</g>
+
+<!-- ════════════════════════════════════════════════
+     RELATIONSHIPS
+════════════════════════════════════════════════ -->
+
+<!-- 1. Role "1" ──────── "N" User   (Association, Role assigns many Users) -->
+<!-- Role bottom x=420 y=246 → User top x=135 y=60 -->
+<path d="M420 246 L420 280 L135 280 L135 326" fill="none" stroke="#555" stroke-width="1.4" stroke-dasharray="0"/>
+<text font-size="10" fill="#555" x="424" y="268">1</text>
+<text font-size="10" fill="#555" x="138" y="298">N</text>
+<text font-size="10" font-style="italic" fill="#888" x="260" y="275" text-anchor="middle">assigns</text>
+
+<!-- 2. User "1" ──────── "1" UserProfile   (Composition) -->
+<!-- User bottom x=135 y=326 → UserProfile top x=135 y=370 -->
+<line x1="135" y1="326" x2="135" y2="370" stroke="#555" stroke-width="1.4" marker-start="url(#diamond-filled)"/>
+<text font-size="10" fill="#555" x="140" y="345">1</text>
+<text font-size="10" fill="#555" x="140" y="366">1</text>
+<text font-size="10" font-style="italic" fill="#888" x="172" y="352">has</text>
+
+<!-- 3. User "1" ──────── "N" Session   (Association) -->
+<!-- User right x=250 y=185 → Session left x=310 y=420 -->
+<path d="M250 185 L280 185 L280 418 L310 418" fill="none" stroke="#555" stroke-width="1.4"/>
+<text font-size="10" fill="#555" x="254" y="180">1</text>
+<text font-size="10" fill="#555" x="295" y="413">N</text>
+<text font-size="10" font-style="italic" fill="#888" x="284" y="300">creates</text>
+
+<!-- 4. User "1" ──────── "N" Event  (organizer creates events) -->
+<!-- User right x=250 y=150 → Event left x=610 y=150 -->
+<line x1="250" y1="150" x2="610" y2="150" stroke="#555" stroke-width="1.4"/>
+<text font-size="10" fill="#555" x="255" y="144">1</text>
+<text font-size="10" fill="#555" x="596" y="144">N</text>
+<text font-size="10" font-style="italic" fill="#888" x="428" y="143">organizes</text>
+
+<!-- 5. User "1" ──────── "N" Attendee  (Has relationship from ER) -->
+<!-- User bottom x=135 y=326 → Attendee ...via path -->
+<path d="M135 326 L135 612 L310 612 L310 640" fill="none" stroke="#555" stroke-width="1.4"/>
+<text font-size="10" fill="#555" x="139" y="376">1</text>
+<text font-size="10" fill="#555" x="313" y="636">N</text>
+<text font-size="10" font-style="italic" fill="#888" x="220" y="608">has</text>
+
+<!-- 6. Event "1" ──────── "N" Task  (Contains) -->
+<!-- Event bottom x=730 y=406 → Task top x=1040 y=60 via path -->
+<path d="M850 220 L920 220" fill="none" stroke="#555" stroke-width="1.4"/>
+<text font-size="10" fill="#555" x="854" y="215">1</text>
+<text font-size="10" fill="#555" x="905" y="215">N</text>
+<text font-size="10" font-style="italic" fill="#888" x="884" y="210">contains</text>
+
+<!-- 7. Event "1" ──────── "N" EventStatusLog  (Change) -->
+<!-- Event bottom x=730 y=406 → EventStatusLog top x=730 y=450 -->
+<line x1="730" y1="406" x2="730" y2="450" stroke="#555" stroke-width="1.4" marker-start="url(#diamond-open)"/>
+<text font-size="10" fill="#555" x="736" y="424">1</text>
+<text font-size="10" fill="#555" x="736" y="446">N</text>
+<text font-size="10" font-style="italic" fill="#888" x="762" y="432">logs</text>
+
+<!-- 8. Task "1" ──────── "N" TaskProgressLog  (Update) -->
+<!-- Task bottom x=1040 y=426 → TaskProgressLog top x=1040 y=460 -->
+<line x1="1040" y1="426" x2="1040" y2="460" stroke="#555" stroke-width="1.4" marker-start="url(#diamond-open)"/>
+<text font-size="10" fill="#555" x="1046" y="440">1</text>
+<text font-size="10" fill="#555" x="1046" y="456">N</text>
+<text font-size="10" font-style="italic" fill="#888" x="1070" y="446">logs</text>
+
+<!-- 9. User "1" ──────── "N" Task  (assigned_to) dashed -->
+<path d="M250 240 L580 240 L580 320 L920 320" fill="none" stroke="#888" stroke-width="1.2" stroke-dasharray="5 3"/>
+<text font-size="10" fill="#888" x="254" y="234">1</text>
+<text font-size="10" fill="#888" x="906" y="314">N</text>
+<text font-size="10" font-style="italic" fill="#aaa" x="580" y="310" text-anchor="middle">assigned to</text>
+
+<!-- 10. Attendee "N" ─── "M" Event (many attendees per event) -->
+<path d="M530 700 L610 700 L610 310 L730 310 L730 406" fill="none" stroke="#555" stroke-width="1.4" stroke-dasharray="5 3"/>
+<text font-size="10" fill="#555" x="534" y="695">N</text>
+<text font-size="10" fill="#555" x="733" y="402">M</text>
+<text font-size="10" font-style="italic" fill="#aaa" x="620" y="695">attends</text>
+
+<!-- ════ LEGEND ════ -->
+<rect x="20" y="920" width="1260" height="86" rx="8" fill="none" stroke="#ccc" stroke-width="1"/>
+<text font-size="12" font-weight="600" fill="#555" x="650" y="940" text-anchor="middle">Legend</text>
+
+<rect x="36" y="952" width="18" height="12" rx="2" fill="#EEEDFE" stroke="#534AB7" stroke-width="1.2"/>
+<text font-size="10" fill="#555" x="60" y="962">User / Profile</text>
+
+<rect x="160" y="952" width="18" height="12" rx="2" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.2"/>
+<text font-size="10" fill="#555" x="184" y="962">Role / Session</text>
+
+<rect x="290" y="952" width="18" height="12" rx="2" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.2"/>
+<text font-size="10" fill="#555" x="314" y="962">Attendee</text>
+
+<rect x="400" y="952" width="18" height="12" rx="2" fill="#FAEEDA" stroke="#854F0B" stroke-width="1.2"/>
+<text font-size="10" fill="#555" x="424" y="962">Event</text>
+
+<rect x="500" y="952" width="18" height="12" rx="2" fill="#FAECE7" stroke="#993C1D" stroke-width="1.2"/>
+<text font-size="10" fill="#555" x="524" y="962">Task</text>
+
+<rect x="600" y="952" width="18" height="12" rx="2" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="1.2"/>
+<text font-size="10" fill="#555" x="624" y="962">Status Logs</text>
+
+<line x1="720" y1="958" x2="750" y2="958" stroke="#555" stroke-width="1.4" marker-start="url(#diamond-filled)"/>
+<text font-size="10" fill="#555" x="756" y="962">Composition</text>
+
+<line x1="850" y1="958" x2="880" y2="958" stroke="#555" stroke-width="1.4" marker-start="url(#diamond-open)"/>
+<text font-size="10" fill="#555" x="886" y="962">Aggregation</text>
+
+<line x1="980" y1="958" x2="1010" y2="958" stroke="#555" stroke-width="1.4"/>
+<text font-size="10" fill="#555" x="1016" y="962">Association (1:N)</text>
+
+<line x1="1120" y1="958" x2="1150" y2="958" stroke="#888" stroke-width="1.2" stroke-dasharray="5 3"/>
+<text font-size="10" fill="#555" x="1156" y="962">Dependency</text>
+
+<!-- row 2 of legend -->
+<text font-size="10" fill="#534AB7" font-weight="700" x="36" y="994">- PK</text>
+<text font-size="10" fill="#555" x="58" y="994">= Primary Key</text>
+<text font-size="10" fill="#534AB7" font-weight="700" x="170" y="994">- FK</text>
+<text font-size="10" fill="#555" x="192" y="994">= Foreign Key</text>
+<text font-size="10" fill="#555" x="310" y="994">+ method() = public method</text>
+<text font-size="10" fill="#555" x="510" y="994">- attribute = private attribute</text>
+<text font-size="10" fill="#555" x="720" y="994">Numbers at line ends show cardinality (1, N, M)</text>
+</svg>
+</div>
