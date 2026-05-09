@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WasteWise</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green-50: #eafbf0;
+  --green-100: #c3f0d5;
+  --green-300: #4ecb82;
+  --green-400: #27ae60;
+  --green-500: #1e8449;
+  --green-600: #166637;
+  --green-700: #0d4a24;
+  --green-800: #0a3a1c;
+  --green-900: #071e0f;
+  --amber-400: #f39c12;
+  --red-400: #e74c3c;
+  --blue-400: #3498db;
+  --teal-400: #1abc9c;
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #21262d;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #f0f6fc;
+  --text2: #8b949e;
+  --text3: #6e7681;
+  --accent: #27ae60;
+  --accent-glow: rgba(39,174,96,0.25);
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── PHONE FRAME ── */
+.phone-wrap {
+  /* Scale to fit viewport: max 390×844, shrink to fit with padding */
+  --ph: min(844px, calc(100vh - 32px));
+  --pw: calc(var(--ph) * 390 / 844);
+  width: var(--pw);
+  height: var(--ph);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: var(--green-900);
+  border-radius: clamp(28px, 5.2vw, 44px);
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 0 0 8px #e0e0e0,
+    0 0 0 10px #cccccc,
+    0 20px 60px rgba(0,0,0,0.18),
+    0 0 80px rgba(39,174,96,0.06);
+}
+
+/* ── STATUS BAR ── */
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  position: relative;
+  z-index: 10;
+}
+
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+/* ── SCREEN ROUTER ── */
+.screen { display: none; flex-direction: column; height: 100%; }
+.screen.active { display: flex; }
+
+/* ════════════════════════════════════
+   LOGIN SCREEN
+   ════════════════════════════════════ */
+#loginScreen {
+  background: linear-gradient(180deg, var(--green-900) 0%, #050e07 100%);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+#loginScreen::before {
+  content: '';
+  position: absolute;
+  top: -80px; left: 50%;
+  transform: translateX(-50%);
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(39,174,96,0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.login-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 32px 32px;
+  position: relative;
+  z-index: 1;
+  overflow-y: auto;
+}
+
+.login-logo-wrap {
+  margin: 30px 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-logo-icon {
+  width: 72px; height: 72px;
+  background: linear-gradient(135deg, var(--green-400), var(--green-300));
+  border-radius: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px;
+  box-shadow: 0 8px 32px rgba(39,174,96,0.4);
+  margin-bottom: 16px;
+}
+
+.login-app-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  color: white;
+  letter-spacing: -0.5px;
+}
+
+.login-tagline {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.12em;
+  margin-top: 4px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.login-form {
+  width: 100%;
+  margin-top: 24px;
+}
+
+.login-label {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+  letter-spacing: 0.02em;
+}
+
+/* Role selector */
+.role-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.role-tab {
+  flex: 1;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255,255,255,0.12);
+  background: transparent;
+  color: rgba(255,255,255,0.45);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.role-tab.active {
+  background: var(--green-500);
+  border-color: var(--green-400);
+  color: white;
+  box-shadow: 0 4px 14px rgba(39,174,96,0.35);
+}
+
+/* Input fields */
+.input-group {
+  margin-bottom: 16px;
+}
+
+.login-input {
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: white;
+  outline: none;
+  transition: all 0.2s;
+  -webkit-appearance: none;
+}
+
+.login-input::placeholder { color: rgba(255,255,255,0.3); }
+
+.login-input:focus {
+  border-color: var(--green-400);
+  background: rgba(39,174,96,0.08);
+}
+
+/* Login button */
+.login-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--green-500), var(--green-400));
+  border: none;
+  border-radius: 14px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  margin-top: 8px;
+  box-shadow: 0 6px 24px rgba(39,174,96,0.4);
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.login-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 3px 12px rgba(39,174,96,0.3);
+}
+
+.login-signup {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.login-signup:active { color: var(--green-300); }
+
+.login-terms {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  line-height: 1.6;
+}
+
+.login-terms a { color: rgba(255,255,255,0.4); text-decoration: underline; }
+
+/* ════════════════════════════════════
+   APP SCREEN (Main App)
+   ════════════════════════════════════ */
+#appScreen {
+  background: var(--bg);
+  flex-direction: column;
+}
+
+/* ── TOP BAR ── */
+.app-topbar {
+  background: rgba(13,17,23,0.95);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.app-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-logo-icon {
+  width: 30px; height: 30px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+}
+
+.app-logo span { color: var(--green-300); }
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.live-badge {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--green-300);
+  background: rgba(39,174,96,0.1);
+  border: 1px solid rgba(39,174,96,0.25);
+  padding: 4px 10px; border-radius: 20px;
+}
+
+.live-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--green-300);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.logout-btn {
+  width: 28px; height: 28px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; cursor: pointer;
+}
+
+/* ── SCROLL AREA ── */
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.app-content::-webkit-scrollbar { display: none; }
+
+/* ── SECTIONS ── */
+.app-section { display: none; }
+.app-section.active { display: block; }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  display: flex;
+  background: rgba(22,27,34,0.98);
+  border-top: 1px solid var(--border);
+  padding: 8px 4px 16px;
+  flex-shrink: 0;
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 2px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.15s;
+  background: none;
+  border: none;
+}
+
+.nav-icon { font-size: 20px; }
+.nav-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text3);
+  transition: color 0.15s;
+}
+
+.nav-item.active .nav-label { color: var(--accent); }
+.nav-item.active .nav-icon { filter: drop-shadow(0 0 6px rgba(39,174,96,0.6)); }
+
+/* ════════════════════════════════════
+   DASHBOARD CONTENT
+   ════════════════════════════════════ */
+.dash-hero {
+  padding: 20px 20px 16px;
+  background: linear-gradient(180deg, rgba(39,174,96,0.06) 0%, transparent 100%);
+}
+
+.greeting { font-size: 13px; color: var(--text3); margin-bottom: 2px; }
+.dash-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.dash-title em { color: var(--green-300); font-style: normal; }
+.dash-sub { font-size: 12px; color: var(--text3); }
+
+/* Stat scroll */
+.stat-scroll {
+  display: flex;
+  gap: 10px;
+  padding: 0 20px 16px;
+  overflow-x: auto;
+}
+.stat-scroll::-webkit-scrollbar { display: none; }
+
+.stat-pill {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  min-width: 100px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-pill::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--pill-color, var(--accent));
+  border-radius: 12px 12px 0 0;
+}
+
+.stat-pill-label {
+  font-size: 10px;
+  color: var(--text3);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.stat-pill-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--pill-color, var(--green-300));
+  margin-bottom: 3px;
+}
+
+.stat-pill-change {
+  font-size: 10px;
+  color: var(--green-300);
+}
+.stat-pill-change.down { color: var(--red-400); }
+
+/* Cards */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 0 16px 14px;
+}
+
+.card-head {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.card-badge {
+  font-size: 10px; font-weight: 600;
+  padding: 2px 7px; border-radius: 4px;
+  background: rgba(39,174,96,0.15);
+  color: var(--green-300);
+}
+
+.card-body { padding: 14px 16px; }
+
+/* Chart wrap */
+.chart-wrap { position: relative; height: 180px; }
+
+/* Zone list */
+.zone-list { display: flex; flex-direction: column; gap: 8px; }
+
+.zone-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px;
+  background: var(--bg3);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.zone-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+
+.zone-info { flex: 1; min-width: 0; }
+.zone-name { font-size: 12px; font-weight: 500; }
+.zone-detail { font-size: 10px; color: var(--text3); }
+
+.zone-bar-wrap { width: 60px; }
+.zone-bar { height: 3px; border-radius: 2px; background: var(--border); margin-bottom: 2px; }
+.zone-fill { height: 100%; border-radius: 2px; }
+.zone-pct { font-size: 10px; color: var(--text2); text-align: right; }
+
+/* Activity */
+.activity-list { display: flex; flex-direction: column; }
+.activity-item {
+  display: flex; gap: 10px; padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.activity-item:last-child { border-bottom: none; }
+
+.activity-icon {
+  width: 28px; height: 28px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+
+.activity-text { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.activity-text strong { color: var(--text); font-weight: 500; }
+.activity-time { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+/* Tag */
+.tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
+.tag-green { background: rgba(39,174,96,0.15); color: var(--green-300); }
+.tag-amber { background: rgba(243,156,18,0.15); color: var(--amber-400); }
+.tag-red { background: rgba(231,76,60,0.15); color: var(--red-400); }
+.tag-blue { background: rgba(52,152,219,0.15); color: var(--blue-400); }
+
+/* ════════════════════════════════════
+   BILLING SECTION
+   ════════════════════════════════════ */
+.section-header {
+  padding: 20px 20px 14px;
+}
+
+.section-header h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px; font-weight: 800;
+  color: var(--text);
+}
+
+.section-header p {
+  font-size: 12px; color: var(--text3); margin-top: 2px;
+}
+
+.invoice-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+  margin: 0 16px 14px;
+}
+
+.invoice-header {
+  background: linear-gradient(135deg, var(--green-700), var(--green-500));
+  padding: 18px 18px 16px;
+}
+
+.invoice-logo {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: 14px; color: white; margin-bottom: 10px;
+}
+
+.invoice-id { font-size: 11px; color: rgba(255,255,255,0.65); }
+.invoice-amount {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.2rem; font-weight: 700; color: white; margin-top: 4px;
+}
+
+.invoice-body { padding: 14px 16px; }
+
+.invoice-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.invoice-row:last-of-type { border-bottom: none; }
+.invoice-row-label { color: var(--text2); }
+.invoice-row-value { font-weight: 500; }
+
+.pay-methods { display: flex; gap: 8px; margin: 12px 16px; }
+.pay-method {
+  flex: 1; padding: 9px 6px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; text-align: center; font-size: 11px;
+  color: var(--text2); cursor: pointer;
+  transition: all 0.15s;
+}
+.pay-method.selected {
+  border-color: var(--accent); color: var(--accent);
+  background: rgba(39,174,96,0.08);
+}
+
+.pay-btn {
+  width: calc(100% - 32px);
+  margin: 0 16px 16px;
+  padding: 15px;
+  background: linear-gradient(135deg, var(--green-500), var(--green-400));
+  border: none; border-radius: 12px; cursor: pointer;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px;
+  color: white;
+  box-shadow: 0 4px 20px rgba(39,174,96,0.35);
+  transition: all 0.2s;
+}
+
+.pay-btn:active { transform: scale(0.98); }
+
+.chart-wrap-sm { position: relative; height: 140px; }
+
+/* ════════════════════════════════════
+   NOTIFICATIONS SECTION
+   ════════════════════════════════════ */
+.notif-compose {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 16px; margin: 0 16px 14px;
+}
+
+.form-row { margin-bottom: 12px; }
+.form-label {
+  font-size: 11px; font-weight: 500; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 5px; display: block;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%; background: var(--bg3);
+  border: 1px solid var(--border2); border-radius: 8px;
+  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px;
+  padding: 9px 11px;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none; border-color: var(--accent);
+}
+.form-textarea { resize: vertical; min-height: 70px; }
+
+.send-btn {
+  padding: 10px 20px; background: var(--accent); border: none;
+  border-radius: 8px; cursor: pointer;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+  color: white;
+}
+
+.notif-list { display: flex; flex-direction: column; gap: 8px; margin: 0 16px 20px; }
+
+.notif-item {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+  display: flex; gap: 10px; align-items: flex-start;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.notif-type-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+
+.notif-content { flex: 1; }
+.notif-title { font-weight: 500; font-size: 12px; margin-bottom: 2px; }
+.notif-body { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+.notif-meta { display: flex; gap: 8px; font-size: 10px; color: var(--text3); }
+
+/* ════════════════════════════════════
+   ANALYTICS / AUTHORITY TABS
+   ════════════════════════════════════ */
+.impact-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px; margin: 0 16px 14px;
+}
+
+.impact-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 8px; text-align: center;
+}
+.impact-icon { font-size: 1.5rem; margin-bottom: 4px; }
+.impact-number {
+  font-family: 'Syne', sans-serif; font-size: 1.3rem;
+  font-weight: 700; color: var(--green-300);
+}
+.impact-label { font-size: 9px; color: var(--text3); margin-top: 2px; }
+
+.perf-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; margin: 0 16px 14px;
+}
+
+.perf-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px;
+}
+
+.perf-name { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+.perf-score {
+  font-family: 'Syne', sans-serif; font-size: 1.8rem;
+  font-weight: 700;
+}
+.perf-bar {
+  height: 5px; background: var(--bg3); border-radius: 3px;
+  margin: 8px 0 4px;
+}
+.perf-fill { height: 100%; border-radius: 3px; }
+.perf-sub { font-size: 10px; color: var(--text3); }
+
+.drivers-list {
+  display: flex; flex-direction: column;
+  gap: 8px; margin: 0 16px 20px;
+}
+
+.driver-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px;
+  display: flex; gap: 10px; align-items: center;
+}
+
+.driver-avatar {
+  width: 36px; height: 36px; border-radius: 9px;
+  background: var(--bg3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+
+.driver-info { flex: 1; }
+.driver-name { font-size: 13px; font-weight: 500; }
+.driver-route { font-size: 11px; color: var(--text3); }
+.driver-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 6px; }
+.driver-prog { height: 100%; border-radius: 2px; }
+
+/* ── AUDIT TABLE ── */
+.audit-cards { display: flex; flex-direction: column; gap: 8px; margin: 0 16px 20px; }
+
+.audit-row {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+}
+.audit-row-top {
+  display: flex; justify-content: space-between;
+  margin-bottom: 4px;
+}
+.audit-action { font-size: 13px; font-weight: 500; color: var(--text); }
+.audit-time { font-size: 11px; color: var(--text3); }
+.audit-id { font-size: 10px; color: var(--text3); font-family: monospace; }
+.audit-user { font-size: 11px; color: var(--text2); }
+.audit-row-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 6px;
+}
+
+.filter-bar {
+  display: flex; gap: 6px;
+  padding: 0 16px 12px;
+  overflow-x: auto;
+}
+.filter-bar::-webkit-scrollbar { display: none; }
+
+.filter-btn {
+  padding: 6px 12px; background: var(--bg2);
+  border: 1px solid var(--border); border-radius: 6px;
+  color: var(--text2); font-size: 12px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap; flex-shrink: 0;
+  transition: all 0.15s;
+}
+.filter-btn.active {
+  border-color: var(--accent); color: var(--accent);
+  background: rgba(39,174,96,0.08);
+}
+
+/* ── TOAST ── */
+#toast {
+  position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--bg2); border: 1px solid var(--accent);
+  color: var(--text); padding: 10px 18px; border-radius: 10px;
+  font-size: 13px; font-weight: 500;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  z-index: 999;
+  display: flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Scrollbar hide for all */
+* { scrollbar-width: none; }
+
+</style>
+</head>
+<body>
+
+<div class="phone-wrap">
+  <div class="phone-screen">
+
+    <!-- STATUS BAR -->
+    <div class="status-bar" id="statusBar">
+      <span>9:41</span>
+      <div id="statusTitle" style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:white;">WasteWise</div>
+      <div class="status-right">
+        <span>●●●</span>
+        <span>100%</span>
+      </div>
+    </div>
+
+    <!-- ════════════ LOGIN SCREEN ════════════ -->
+    <div id="loginScreen" class="screen active">
+      <div class="login-content">
+
+        <div class="login-logo-wrap">
+          <div class="login-logo-icon">♻️</div>
+          <div class="login-app-name">WasteWise</div>
+          <div class="login-tagline">Collect · Monitor · Sustain</div>
+        </div>
+
+        <div class="login-form">
+          <label class="login-label">Login as</label>
+          <div class="role-tabs">
+            <button class="role-tab active" onclick="selectRole(this)">Citizen</button>
+            <button class="role-tab" onclick="selectRole(this)">Driver</button>
+            <button class="role-tab" onclick="selectRole(this)">Authority</button>
+          </div>
+
+          <div class="input-group">
+            <label class="login-label">Email or Phone</label>
+            <input type="email" class="login-input" placeholder="arif@example.com" value="arif@example.com">
+          </div>
+
+          <div class="input-group">
+            <label class="login-label">Password</label>
+            <input type="password" class="login-input" placeholder="••••••••" value="password123">
+          </div>
+
+          <button class="login-btn" onclick="doLogin()">Log In</button>
+
+          <div class="login-signup" onclick="showToastMsg('Sign up coming soon!')">Sign Up</div>
+
+          <div class="login-terms">
+            By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════ APP SCREEN ════════════ -->
+    <div id="appScreen" class="screen" style="display:none;flex-direction:column;height:calc(100% - 40px);">
+
+      <!-- TOP BAR -->
+      <div class="app-topbar">
+        <div class="app-logo">
+          <div class="app-logo-icon">♻</div>
+          WasteWise<span>.</span>
+        </div>
+        <div class="topbar-right">
+          <div class="live-badge">
+            <div class="live-dot"></div>
+            Live
+          </div>
+          <div class="logout-btn" onclick="doLogout()">↩</div>
+        </div>
+      </div>
+
+      <!-- SCROLL CONTENT -->
+      <div class="app-content">
+
+        <!-- ── DASHBOARD ── -->
+        <div id="sec-dashboard" class="app-section active">
+          <div class="dash-hero">
+            <div class="greeting">Good morning, Arif 👋</div>
+            <h1 class="dash-title">City Ops <em>Overview</em></h1>
+            <p class="dash-sub">Real-time monitoring across all zones</p>
+          </div>
+
+          <div class="stat-scroll">
+            <div class="stat-pill" style="--pill-color: var(--green-300)">
+              <div class="stat-pill-label">Trucks</div>
+              <div class="stat-pill-value">24</div>
+              <div class="stat-pill-change">↑ +3 today</div>
+            </div>
+            <div class="stat-pill" style="--pill-color: var(--blue-400)">
+              <div class="stat-pill-label">Collections</div>
+              <div class="stat-pill-value">347</div>
+              <div class="stat-pill-change">↑ +12%</div>
+            </div>
+            <div class="stat-pill" style="--pill-color: var(--amber-400)">
+              <div class="stat-pill-label">Pending</div>
+              <div class="stat-pill-value">18</div>
+              <div class="stat-pill-change">↓ 5 done</div>
+            </div>
+            <div class="stat-pill" style="--pill-color: var(--teal-400)">
+              <div class="stat-pill-label">Revenue</div>
+              <div class="stat-pill-value">৳42k</div>
+              <div class="stat-pill-change">↑ +8.3%</div>
+            </div>
+            <div class="stat-pill" style="--pill-color: var(--red-400)">
+              <div class="stat-pill-label">Overdue</div>
+              <div class="stat-pill-value" style="color:var(--red-400)">3</div>
+              <div class="stat-pill-change down">Needs action</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">📊 Weekly Collection <span class="card-badge">Live</span></div>
+            </div>
+            <div class="card-body">
+              <div class="chart-wrap">
+                <canvas id="collectionChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">🗺 Zone Status</div>
+            </div>
+            <div class="card-body">
+              <div class="zone-list">
+                <div class="zone-item">
+                  <div class="zone-dot" style="background:var(--green-300)"></div>
+                  <div class="zone-info">
+                    <div class="zone-name">Zone A — Mirpur</div>
+                    <div class="zone-detail">Truck #07 · On Route</div>
+                  </div>
+                  <div class="zone-bar-wrap">
+                    <div class="zone-bar"><div class="zone-fill" style="width:88%;background:var(--green-300)"></div></div>
+                    <div class="zone-pct">88%</div>
+                  </div>
+                  <span class="tag tag-green">Active</span>
+                </div>
+                <div class="zone-item">
+                  <div class="zone-dot" style="background:var(--blue-400)"></div>
+                  <div class="zone-info">
+                    <div class="zone-name">Zone B — Gulshan</div>
+                    <div class="zone-detail">Truck #12 · Loading</div>
+                  </div>
+                  <div class="zone-bar-wrap">
+                    <div class="zone-bar"><div class="zone-fill" style="width:74%;background:var(--blue-400)"></div></div>
+                    <div class="zone-pct">74%</div>
+                  </div>
+                  <span class="tag tag-blue">Loading</span>
+                </div>
+                <div class="zone-item">
+                  <div class="zone-dot" style="background:var(--amber-400)"></div>
+                  <div class="zone-info">
+                    <div class="zone-name">Zone C — Dhanmondi</div>
+                    <div class="zone-detail">Truck #03 · Delayed</div>
+                  </div>
+                  <div class="zone-bar-wrap">
+                    <div class="zone-bar"><div class="zone-fill" style="width:61%;background:var(--amber-400)"></div></div>
+                    <div class="zone-pct">61%</div>
+                  </div>
+                  <span class="tag tag-amber">Delayed</span>
+                </div>
+                <div class="zone-item">
+                  <div class="zone-dot" style="background:var(--red-400)"></div>
+                  <div class="zone-info">
+                    <div class="zone-name">Zone D — Uttara</div>
+                    <div class="zone-detail">No truck assigned</div>
+                  </div>
+                  <div class="zone-bar-wrap">
+                    <div class="zone-bar"><div class="zone-fill" style="width:42%;background:var(--red-400)"></div></div>
+                    <div class="zone-pct">42%</div>
+                  </div>
+                  <span class="tag tag-red">Overdue</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">📋 Recent Activity</div>
+            </div>
+            <div class="card-body">
+              <div class="activity-list">
+                <div class="activity-item">
+                  <div class="activity-icon" style="background:rgba(39,174,96,0.15)">✅</div>
+                  <div>
+                    <div class="activity-text"><strong>Zone A collection</strong> completed on schedule</div>
+                    <div class="activity-time">5 min ago · 847 kg collected</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon" style="background:rgba(243,156,18,0.15)">⚠️</div>
+                  <div>
+                    <div class="activity-text"><strong>Truck #03</strong> reported 40-min delay in Zone C</div>
+                    <div class="activity-time">22 min ago · Traffic issue</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon" style="background:rgba(52,152,219,0.15)">💳</div>
+                  <div>
+                    <div class="activity-text"><strong>New payment</strong> received from Resident #4482</div>
+                    <div class="activity-time">1 hour ago · ৳1,250</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon" style="background:rgba(26,188,156,0.15)">♻️</div>
+                  <div>
+                    <div class="activity-text"><strong>Recycling milestone</strong> reached: 500 kg this week</div>
+                    <div class="activity-time">3 hours ago · Zone B</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── BILLING ── -->
+        <div id="sec-billing" class="app-section">
+          <div class="section-header">
+            <h2>💳 Billing</h2>
+            <p>Manage your waste service payments</p>
+          </div>
+
+          <div class="invoice-card">
+            <div class="invoice-header">
+              <div class="invoice-logo">♻ WasteWise</div>
+              <div class="invoice-id">Invoice #WW-2024-0318</div>
+              <div class="invoice-amount">৳1,250</div>
+            </div>
+            <div class="invoice-body">
+              <div class="invoice-row">
+                <span class="invoice-row-label">Service Period</span>
+                <span class="invoice-row-value">March 2024</span>
+              </div>
+              <div class="invoice-row">
+                <span class="invoice-row-label">Resident ID</span>
+                <span class="invoice-row-value">#DHA-4482</span>
+              </div>
+              <div class="invoice-row">
+                <span class="invoice-row-label">Zone</span>
+                <span class="invoice-row-value">Dhanmondi C</span>
+              </div>
+              <div class="invoice-row">
+                <span class="invoice-row-label">Base Rate</span>
+                <span class="invoice-row-value">৳900</span>
+              </div>
+              <div class="invoice-row">
+                <span class="invoice-row-label">Extra Collection</span>
+                <span class="invoice-row-value">৳350</span>
+              </div>
+              <div class="invoice-row">
+                <span class="invoice-row-label">Status</span>
+                <span class="tag tag-amber">Due</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:0 16px;font-size:12px;color:var(--text3);font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;">Payment Method</div>
+          <div class="pay-methods">
+            <div class="pay-method selected" onclick="selectMethod(this)">📱 bKash</div>
+            <div class="pay-method" onclick="selectMethod(this)">🏦 Nagad</div>
+            <div class="pay-method" onclick="selectMethod(this)">💳 Card</div>
+          </div>
+
+          <button class="pay-btn" onclick="handlePay()">Pay ৳1,250</button>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title">📊 Payment History</div></div>
+            <div class="card-body">
+              <div class="chart-wrap-sm">
+                <canvas id="payChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── NOTIFICATIONS ── -->
+        <div id="sec-notif" class="app-section">
+          <div class="section-header">
+            <h2>🔔 Notifications</h2>
+            <p>Send alerts to residents</p>
+          </div>
+
+          <div class="notif-compose">
+            <div class="form-row">
+              <label class="form-label">Zone</label>
+              <select class="form-select" id="notifZone">
+                <option>Zone A — Mirpur</option>
+                <option>Zone B — Gulshan</option>
+                <option>Zone C — Dhanmondi</option>
+                <option>Zone D — Uttara</option>
+                <option>All Zones</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Type</label>
+              <select class="form-select" id="notifType">
+                <option value="pickup">📅 Pickup Reminder</option>
+                <option value="delay">⚠️ Delay Notice</option>
+                <option value="payment">💳 Payment Due</option>
+                <option value="update">📢 General Update</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Message</label>
+              <textarea class="form-textarea" id="notifMsg" placeholder="Enter message...">Your waste collection is scheduled for tomorrow at 8 AM.</textarea>
+            </div>
+            <button class="send-btn" onclick="sendNotif()">Send Alert ➤</button>
+          </div>
+
+          <div class="notif-list" id="notifList">
+            <div class="notif-item">
+              <div class="notif-type-icon" style="background:rgba(52,152,219,0.15)">📅</div>
+              <div class="notif-content">
+                <div class="notif-title">Pickup Reminder — Zone A</div>
+                <div class="notif-body">Collection tomorrow at 8 AM. Please place bins outside.</div>
+                <div class="notif-meta"><span>Zone A</span><span>Delivered</span><span>2h ago</span></div>
+              </div>
+              <span class="tag tag-green">Sent</span>
+            </div>
+            <div class="notif-item">
+              <div class="notif-type-icon" style="background:rgba(243,156,18,0.15)">⚠️</div>
+              <div class="notif-content">
+                <div class="notif-title">Delay Notice — Zone C</div>
+                <div class="notif-body">Today's collection delayed by approximately 40 minutes due to traffic.</div>
+                <div class="notif-meta"><span>Zone C</span><span>Delivered</span><span>4h ago</span></div>
+              </div>
+              <span class="tag tag-amber">Sent</span>
+            </div>
+            <div class="notif-item">
+              <div class="notif-type-icon" style="background:rgba(231,76,60,0.15)">💳</div>
+              <div class="notif-content">
+                <div class="notif-title">Payment Due — Zone D</div>
+                <div class="notif-body">March invoice of ৳1,250 is due. Pay via bKash or Nagad.</div>
+                <div class="notif-meta"><span>Zone D</span><span>Delivered</span><span>1d ago</span></div>
+              </div>
+              <span class="tag tag-red">Sent</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── ANALYTICS ── -->
+        <div id="sec-analytics" class="app-section">
+          <div class="section-header">
+            <h2>📈 Analytics</h2>
+            <p>Environmental impact & trends</p>
+          </div>
+
+          <div class="impact-grid">
+            <div class="impact-card">
+              <div class="impact-icon">🌿</div>
+              <div class="impact-number">1.2k</div>
+              <div class="impact-label">CO₂ Saved</div>
+            </div>
+            <div class="impact-card">
+              <div class="impact-icon">♻️</div>
+              <div class="impact-number">68%</div>
+              <div class="impact-label">Recycled</div>
+            </div>
+            <div class="impact-card">
+              <div class="impact-icon">⭐</div>
+              <div class="impact-number">4.2</div>
+              <div class="impact-label">Satisfaction</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title">📉 Monthly Waste Trend</div></div>
+            <div class="card-body">
+              <div class="chart-wrap">
+                <canvas id="trendChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title">🥧 Waste Composition</div></div>
+            <div class="card-body">
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+                <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:8px;height:8px;border-radius:2px;background:#27ae60;display:inline-block"></span>Organic 42%</span>
+                <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:8px;height:8px;border-radius:2px;background:#3498db;display:inline-block"></span>Recyclable 24%</span>
+                <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:8px;height:8px;border-radius:2px;background:#e67e22;display:inline-block"></span>General 22%</span>
+                <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:8px;height:8px;border-radius:2px;background:#e74c3c;display:inline-block"></span>Hazardous 12%</span>
+              </div>
+              <div class="chart-wrap" style="height:160px">
+                <canvas id="pieChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:20px">
+            <div class="card-head"><div class="card-title">🌿 Weekly CO₂ Offset</div></div>
+            <div class="card-body">
+              <div class="chart-wrap" style="height:150px">
+                <canvas id="ecoChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── AUTHORITY ── -->
+        <div id="sec-authority" class="app-section">
+          <div class="section-header">
+            <h2>🏛 Authority</h2>
+            <p>Zone performance & audit logs</p>
+          </div>
+
+          <div class="perf-grid">
+            <div class="perf-card">
+              <div class="perf-name">Zone A · Mirpur</div>
+              <div class="perf-score" style="color:var(--green-300)">88%</div>
+              <div class="perf-bar"><div class="perf-fill" style="width:88%;background:var(--green-300)"></div></div>
+              <div class="perf-sub">24 collections this week</div>
+            </div>
+            <div class="perf-card">
+              <div class="perf-name">Zone B · Gulshan</div>
+              <div class="perf-score" style="color:var(--blue-400)">74%</div>
+              <div class="perf-bar"><div class="perf-fill" style="width:74%;background:var(--blue-400)"></div></div>
+              <div class="perf-sub">19 collections this week</div>
+            </div>
+            <div class="perf-card">
+              <div class="perf-name">Zone C · Dhanmondi</div>
+              <div class="perf-score" style="color:var(--amber-400)">61%</div>
+              <div class="perf-bar"><div class="perf-fill" style="width:61%;background:var(--amber-400)"></div></div>
+              <div class="perf-sub">15 collections this week</div>
+            </div>
+            <div class="perf-card">
+              <div class="perf-name">Zone D · Uttara</div>
+              <div class="perf-score" style="color:var(--red-400)">42%</div>
+              <div class="perf-bar"><div class="perf-fill" style="width:42%;background:var(--red-400)"></div></div>
+              <div class="perf-sub">9 collections this week</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title">📊 Zone Efficiency</div></div>
+            <div class="card-body">
+              <div class="chart-wrap">
+                <canvas id="zoneChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:0 16px 8px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);">🚚 Active Drivers</div>
+          <div class="drivers-list">
+            <div class="driver-card">
+              <div class="driver-avatar">👨</div>
+              <div class="driver-info">
+                <div class="driver-name">Md. Karim · Truck #07</div>
+                <div class="driver-route">Zone A — 88% complete</div>
+                <div class="driver-bar"><div class="driver-prog" style="width:88%;background:var(--green-300)"></div></div>
+              </div>
+              <span class="tag tag-green">On Route</span>
+            </div>
+            <div class="driver-card">
+              <div class="driver-avatar">👨</div>
+              <div class="driver-info">
+                <div class="driver-name">Rafiq Ahmed · Truck #12</div>
+                <div class="driver-route">Zone B — 74% complete</div>
+                <div class="driver-bar"><div class="driver-prog" style="width:74%;background:var(--blue-400)"></div></div>
+              </div>
+              <span class="tag tag-blue">Loading</span>
+            </div>
+            <div class="driver-card">
+              <div class="driver-avatar">👨</div>
+              <div class="driver-info">
+                <div class="driver-name">Jamal Hossain · Truck #03</div>
+                <div class="driver-route">Zone C — 61% complete</div>
+                <div class="driver-bar"><div class="driver-prog" style="width:61%;background:var(--amber-400)"></div></div>
+              </div>
+              <span class="tag tag-amber">Delayed</span>
+            </div>
+          </div>
+
+          <div style="padding:0 16px 8px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);">📋 Audit Log</div>
+          <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterAudit('all',this)">All</button>
+            <button class="filter-btn" onclick="filterAudit('collection',this)">Collections</button>
+            <button class="filter-btn" onclick="filterAudit('payment',this)">Payments</button>
+            <button class="filter-btn" onclick="filterAudit('alert',this)">Alerts</button>
+          </div>
+          <div class="audit-cards" id="auditBody">
+            <div class="audit-row" data-type="collection">
+              <div class="audit-row-top">
+                <div class="audit-action">Collection Completed</div>
+                <div class="audit-time">09:42 AM</div>
+              </div>
+              <div class="audit-user">Truck #07 · Zone A Mirpur</div>
+              <div class="audit-row-bottom">
+                <div class="audit-id">#LOG-2024-0441</div>
+                <span class="tag tag-green">Success</span>
+              </div>
+            </div>
+            <div class="audit-row" data-type="payment">
+              <div class="audit-row-top">
+                <div class="audit-action">Payment Received</div>
+                <div class="audit-time">08:15 AM</div>
+              </div>
+              <div class="audit-user">Resident #4482 · ৳1,250</div>
+              <div class="audit-row-bottom">
+                <div class="audit-id">#LOG-2024-0440</div>
+                <span class="tag tag-blue">Payment</span>
+              </div>
+            </div>
+            <div class="audit-row" data-type="alert">
+              <div class="audit-row-top">
+                <div class="audit-action">Alert Dispatched</div>
+                <div class="audit-time">07:30 AM</div>
+              </div>
+              <div class="audit-user">Delay notice · Zone C</div>
+              <div class="audit-row-bottom">
+                <div class="audit-id">#LOG-2024-0439</div>
+                <span class="tag tag-amber">Alert</span>
+              </div>
+            </div>
+            <div class="audit-row" data-type="collection">
+              <div class="audit-row-top">
+                <div class="audit-action">Route Updated</div>
+                <div class="audit-time">Yesterday</div>
+              </div>
+              <div class="audit-user">Truck #03 · Zone C rerouted</div>
+              <div class="audit-row-bottom">
+                <div class="audit-id">#LOG-2024-0438</div>
+                <span class="tag tag-blue">Update</span>
+              </div>
+            </div>
+            <div class="audit-row" data-type="payment" style="margin-bottom:20px">
+              <div class="audit-row-top">
+                <div class="audit-action">Invoice Generated</div>
+                <div class="audit-time">Mar 1</div>
+              </div>
+              <div class="audit-user">March billing cycle · All zones</div>
+              <div class="audit-row-bottom">
+                <div class="audit-id">#LOG-2024-0437</div>
+                <span class="tag tag-green">Auto</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /app-content -->
+
+      <!-- BOTTOM NAV -->
+      <div class="bottom-nav">
+        <button class="nav-item active" onclick="showTab('dashboard', this)">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-label">Home</span>
+        </button>
+        <button class="nav-item" onclick="showTab('billing', this)">
+          <span class="nav-icon">💳</span>
+          <span class="nav-label">Billing</span>
+        </button>
+        <button class="nav-item" onclick="showTab('notif', this)">
+          <span class="nav-icon">🔔</span>
+          <span class="nav-label">Alerts</span>
+        </button>
+        <button class="nav-item" onclick="showTab('analytics', this)">
+          <span class="nav-icon">📈</span>
+          <span class="nav-label">Analytics</span>
+        </button>
+        <button class="nav-item" onclick="showTab('authority', this)">
+          <span class="nav-icon">🏛</span>
+          <span class="nav-label">Authority</span>
+        </button>
+      </div>
+
+    </div><!-- /appScreen -->
+
+  </div><!-- /phone-screen -->
+</div><!-- /phone-wrap -->
+
+<!-- TOAST -->
+<div id="toast">✅ <span id="toastMsg">Done!</span></div>
+
+<script>
+// ── LOGIN ──
+function selectRole(btn) {
+  document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function doLogin() {
+  document.getElementById('loginScreen').style.display = 'none';
+  const app = document.getElementById('appScreen');
+  app.style.display = 'flex';
+  document.getElementById('statusBar').style.background = 'transparent';
+  setTimeout(initDashboardCharts, 150);
+}
+
+function doLogout() {
+  document.getElementById('appScreen').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginScreen').classList.add('active');
+}
+
+// ── TABS ──
+function showTab(id, btn) {
+  document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  btn.classList.add('active');
+  document.querySelector('.app-content').scrollTop = 0;
+
+  if (id === 'analytics') setTimeout(initAnalyticsCharts, 100);
+  if (id === 'authority') setTimeout(initAuthorityCharts, 100);
+}
+
+// ── BILLING ──
+function selectMethod(el) {
+  document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function handlePay() {
+  showToastMsg('Payment of ৳1,250 processed successfully!');
+}
+
+// ── NOTIFICATIONS ──
+function sendNotif() {
+  const zone = document.getElementById('notifZone').value;
+  const type = document.getElementById('notifType');
+  const msg = document.getElementById('notifMsg').value;
+  const icons = { pickup:'📅', delay:'⚠️', payment:'💳', update:'📢' };
+  const colors = { pickup:'rgba(52,152,219,0.15)', delay:'rgba(243,156,18,0.15)', payment:'rgba(231,76,60,0.15)', update:'rgba(39,174,96,0.15)' };
+  const typeVal = type.value;
+  const title = type.options[type.selectedIndex].text.replace(/^.\s/,'');
+  const item = document.createElement('div');
+  item.className = 'notif-item';
+  item.innerHTML = `
+    <div class="notif-type-icon" style="background:${colors[typeVal]||'rgba(39,174,96,0.15)'}">${icons[typeVal]||'📢'}</div>
+    <div class="notif-content">
+      <div class="notif-title">${title} — ${zone.split('—')[0].trim()}</div>
+      <div class="notif-body">${msg.slice(0,90)}${msg.length>90?'...':''}</div>
+      <div class="notif-meta"><span>${zone.split('—')[0].trim()}</span><span>Sent</span><span>Just now</span></div>
+    </div>
+    <span class="tag tag-green">Sent</span>
+  `;
+  document.getElementById('notifList').insertBefore(item, document.getElementById('notifList').firstChild);
+  showToastMsg(`Alert sent to ${zone.split('—')[0].trim()}!`);
+}
+
+// ── AUDIT FILTER ──
+function filterAudit(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#auditBody .audit-row').forEach(row => {
+    row.style.display = (type === 'all' || row.dataset.type === type) ? '' : 'none';
+  });
+}
+
+// ── TOAST ──
+function showToastMsg(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── CHARTS ──
+const gridColor = 'rgba(255,255,255,0.05)';
+const labelColor = '#6e7681';
+
+function initDashboardCharts() {
+  if (document.getElementById('collectionChart')._chartInst) return;
+  const c1 = new Chart(document.getElementById('collectionChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      datasets: [
+        { label: 'General', data: [42,58,51,64,48,35,20], backgroundColor: 'rgba(52,152,219,0.7)', borderRadius: 4 },
+        { label: 'Recyclable', data: [18,24,20,28,22,15,9], backgroundColor: 'rgba(39,174,96,0.7)', borderRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { stacked: true, grid: { color: gridColor }, ticks: { color: labelColor, font: { size: 10 } } },
+        y: { stacked: true, grid: { color: gridColor }, ticks: { color: labelColor, font: { size: 10 } } }
+      }
+    }
+  });
+  document.getElementById('collectionChart')._chartInst = c1;
+
+  const c2 = new Chart(document.getElementById('payChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Oct','Nov','Dec','Jan','Feb','Mar'],
+      datasets: [{ data: [900,900,850,900,850,900], backgroundColor: 'rgba(39,174,96,0.7)', borderRadius: 4 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: labelColor, font: { size: 10 } } },
+        y: { grid: { color: gridColor }, ticks: { color: labelColor, font: { size: 10 }, callback: v => '৳'+v } }
+      }
+    }
+  });
+  document.getElementById('payChart')._chartInst = c2;
+}
+
+let analyticsInited = false;
+function initAnalyticsCharts() {
+  if (analyticsInited) return;
+  analyticsInited = true;
+
+  new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      datasets: [{
+        data: [118,124,130,142,135,128,138,145,132,140,128,136],
+        borderColor: '#27ae60', backgroundColor: 'rgba(39,174,96,0.1)',
+        borderWidth: 2, fill: true, tension: 0.4, pointRadius: 3
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: labelColor, font: { size: 10 } } },
+        y: { grid: { color: gridColor }, ticks: { color: labelColor, font: { size: 10 } } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('pieChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Organic','Recyclable','General','Hazardous'],
+      datasets: [{ data: [42,24,22,12], backgroundColor: ['#27ae60','#3498db','#e67e22','#e74c3c'], borderWidth: 0 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      cutout: '65%'
+    }
+  });
+
+  new Chart(document.getElementById('ecoChart'), {
+    type: 'line',
+    data: {
+      labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      datasets: [{
+        data: [2400,2800,2600,3100,2900,2200,1800],
+        borderColor: '#1abc9c', backgroundColor: 'rgba(26,188,156,0.1)',
+        borderWidth: 2, fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#1abc9c'
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: labelColor, font: { size: 10 } } },
+        y: { grid: { color: gridColor }, ticks: { color: labelColor, font: { size: 10 }, callback: v => v+'kg' } }
+      }
+    }
+  });
+}
+
+let authorityInited = false;
+function initAuthorityCharts() {
+  if (authorityInited) return;
+  authorityInited = true;
+
+  new Chart(document.getElementById('zoneChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Zone A','Zone B','Zone C','Zone D','Zone E'],
+      datasets: [{
+        data: [88,74,61,42,96],
+        backgroundColor: ['#27ae60','#3498db','#f39c12','#e74c3c','#1abc9c'],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: labelColor, font: { size: 10 } } },
+        y: { grid: { color: gridColor }, ticks: { color: labelColor, font: { size: 10 }, callback: v => v+'%' }, max: 100 }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
